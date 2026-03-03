@@ -1,0 +1,8 @@
+Cosmological Parameters: 
+	Omega_m = 0.279000
+	     ns = 0.970000
+
+Computing Bm(ell1,ell2) for 128 x 128 array  
+	ellmin = 0.001000, ellmax = 10000.000000  
+	Number of moments = 6
+	Quadrature chi steps= 300
