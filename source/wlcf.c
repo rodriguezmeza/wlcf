@@ -21,6 +21,7 @@
 // ============================================================================
 //        1          2          3          4        ^ 5          6          7
 
+/*
 #define GLOBAL
 #define global
 
@@ -34,6 +35,7 @@
 #include "zetam.h"
 
 #include "cmdline_defs.h"
+*/
 
 /*
  Main routine:
@@ -47,6 +49,7 @@
  Return (the error status):
     int SUCCESS or FAILURE
  */
+/*
 int main(int argc, string argv[])
 {
     struct cmdline_data cmd;                        // share command parameters
@@ -68,7 +71,12 @@ int main(int argc, string argv[])
 
     return SUCCESS;
 }
+*/
 
+#include "global.h"
+#include "procedures.h"
+#include "background.h"
+#include "zetam.h"
 
 /*
  MainLoop routine:
@@ -88,11 +96,13 @@ int main(int argc, string argv[])
  Return (the error status):
     int SUCCESS or FAILURE
  */
-/*
 int MainLoop(struct cmdline_data* cmd, struct  global_data* gd)
 {
     string routineName = "MainLoop";
 	gv.time=clock();
+
+    debug_tracking_s("001", routineName);
+
 	background(cmd, gd, cmd->zbin);
 	if(cmd->chatty>1){
 		printf("time evaluating background: %lf s\n", (double)(clock() - gv.time) / CLOCKS_PER_SEC );
@@ -103,8 +113,6 @@ int MainLoop(struct cmdline_data* cmd, struct  global_data* gd)
 	//~ printf("\n chiOfzT= \n {");    
 	//~ for	(int i=0;i<gv.Nz;i++) printf("{%f, %f}, ", gv.zT[i], gv.chiOfzT[i]);
 	//~ printf("} \n");    
-        
-    debug_tracking_s("001", routineName);
 
     gv.time=clock();
 	gv.z=cmd->zbin;
@@ -131,6 +139,8 @@ int MainLoop(struct cmdline_data* cmd, struct  global_data* gd)
 	
 	//Tests();
 	  	
+    debug_tracking_s("002...final", routineName);
+
     return SUCCESS;
 }
 
@@ -190,7 +200,7 @@ void Tests(void)
 #endif
 //E
 
-*/
+
 
 
 

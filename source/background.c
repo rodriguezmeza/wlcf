@@ -22,9 +22,12 @@
 int background(struct cmdline_data* cmd, struct  global_data* gd,
                double zBin)
 {
+    string routineName = "background";
     double chiMax;
     double H0 = 0.00033356409519815205; //H0 in h/Mpc
     int export=1;
+
+    debug_tracking_s("001", routineName);
 
     gv.NstepsforgL=1000;
     if(cmd->Wg==1) compute_gL(cmd, gd);
@@ -85,6 +88,8 @@ int background(struct cmdline_data* cmd, struct  global_data* gd,
     
     //printf("\n%5.15f \n\n",iv.chiMaxInt-gv.chiBin);
     
+    debug_tracking_s("002... final", routineName);
+
     return SUCCESS;
 };
 

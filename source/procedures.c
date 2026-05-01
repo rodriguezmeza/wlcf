@@ -1,4 +1,11 @@
-// ============================================================================
+/*==============================================================================
+ NAME: procedures.c                [wlcf]
+ Written by: A. Aviles et al.
+ Starting date: february 2026
+ Purpose: Main routine
+ Language: C
+ Major revision:
+ ==============================================================================*/
 //        1          2          3          4        ^ 5          6          7
 
 #include "functions.h"
@@ -6,21 +13,36 @@
 
 #define m_PI   3.1415926535897932384626433
 
-// Initial
+/*
+ Initial routine:
+
+ To be called in main:
+    Initial(&cmd, &gd);
+
+ This routine is in charge of the initialization
+
+ Arguments:
+    * `cmd`: Input: structure cmdline_data pointer
+    * `gd`: Input: structure global_data pointer
+ Return (the error status):
+    int SUCCESS or FAILURE
+ */
 int Initial(struct cmdline_data* cmd, struct  global_data* gd)
 {
     string routineName = "Initial";
+    //B tracking Dplusf
     debug_tracking_s("001", routineName);
     gd->Dpz0 = Dplusf(cmd, gd, 0.0);
     debug_tracking_r("002", gd->Dpz0);
-    read_inputpk(cmd, gd);
-    gd->sigma8 =  sigmaRTH(cmd, gd, 8,0.001,8.,100);
+    //E
+    read_inputpk(cmd, gd);                          // Read linear PS
+                                                    //  power spectrum from CAMB
+    gd->sigma8 = sigmaRTH(cmd, gd, 8,0.001,8.,100); // Computation of sigma8
 
     debug_tracking_s("003... final", routineName);
 
     return SUCCESS;
 }
-
 
 int allocate_iv(struct cmdline_data* cmd, struct  global_data* gd)
 {
@@ -54,13 +76,13 @@ int allocate_iv(struct cmdline_data* cmd, struct  global_data* gd)
 int Bmell(struct cmdline_data* cmd, struct  global_data* gd)
 {
     string routineName = "Bmell";
-    double chi, z, Dp, rsigma, neff, qv;
-    double chiprev, val, half, deltachi;
+//    double chi, z, Dp, rsigma, neff, qv;
+//    double chiprev, val, half, deltachi;
     double chimax, chimin;
     int NumMoments=cmd->mMax+1;
     
-    double BmvectorsB[NumMoments][iv.Nell*iv.Nell];
-    double BmvectorsA[NumMoments][iv.Nell*iv.Nell];
+//    double BmvectorsB[NumMoments][iv.Nell*iv.Nell];
+//    double BmvectorsA[NumMoments][iv.Nell*iv.Nell];
 
 /*    if(cmd->chatty>0){
         printf("\nComputing Bm(ell1,ell2) for symmetric %d x %d array of ell values  \n",
@@ -84,80 +106,145 @@ int Bmell(struct cmdline_data* cmd, struct  global_data* gd)
     chimax = iv.chiT_chiint[iv.chiQuadSteps-1];
     chimin = iv.chiT_chiint[0];
 
-    clock_t localtime;
-//    chiprev = 0.0; //?
-
-    for (int i=0;i<iv.chiQuadSteps;i++){
-
-        localtime=clock();
-
-        chi    = iv.chiT_chiint[i];
-        z      = iv.zT_chiint[i];
-        Dp     = iv.DpT_chiint[i];
-        rsigma = iv.rsigma_chiint[i];
-        neff   = iv.neff_chiint[i];
-        qv     = iv.q_chiint[i];
+#ifdef OPENMPCODE
+#pragma omp parallel default(none) \
+shared(cmd, gd, iv, NumMoments, routineName)
+    {
+//        chi,z,Dp,rsigma,neff,qv, \
+//    deltachi,chiprev, \
+//        BmvectorsB,BmvectorsA,
+#endif
+        double BmvectorsB[NumMoments][iv.Nell*iv.Nell];
+        double BmvectorsA[NumMoments][iv.Nell*iv.Nell];
+        double chi, z, Dp, rsigma, neff, qv;
+        double chi_im1;
+        double chiprev, deltachi;
         
-        deltachi = chi - chiprev;
-        
-        Bm(cmd, gd, chi,z,Dp,rsigma,neff);
-        
+        double **BmVectors, **BmVectorsp;
+        BmVectors  = malloc(NumMoments * sizeof(double *));
+        BmVectorsp = malloc(NumMoments * sizeof(double *));
+/*        for(int m=0; m<NumMoments; m++) {
+            BmVectorsp[m] = malloc(iv.Nell * iv.Nell * sizeof(double));
+            for(int ij=0; ij< iv.Nell*iv.Nell; ij++){
+                 BmVectorsp[m][ij] = 0;
+            }
+        } */
         for(int m=0; m<NumMoments; m++) {
-        for(int ij=0; ij<iv.Nell*iv.Nell ; ij++){
-            BmvectorsB[m][ij] = pow(qv,3.)/pow(chi,4.) * iv.BmVectors[m][ij];
+            BmVectors [m] = malloc(iv.Nell * iv.Nell * sizeof(double));
+            BmVectorsp[m] = malloc(iv.Nell * iv.Nell * sizeof(double));
+            for(int ij=0; ij< iv.Nell*iv.Nell; ij++){
+                 BmVectors [m][ij] = 0;
+                 BmVectorsp[m][ij] = 0;
+            }
         }
-        }
-        
-        if(i==0){
-            for(int m=0; m<NumMoments; m++) {
-                for(int ij=0; ij<iv.Nell*iv.Nell ; ij++){
-                BmvectorsA[m][ij] = BmvectorsB[m][ij];
+
+        clock_t localtime;
+        chiprev = 0.0; //?
+
+#ifdef OPENMPCODE
+#pragma omp for nowait schedule(dynamic)
+#endif
+        for (int i=0;i<iv.chiQuadSteps;i++){
+            localtime=clock();
+            
+            chi    = iv.chiT_chiint[i];
+            z      = iv.zT_chiint[i];
+            Dp     = iv.DpT_chiint[i];
+            rsigma = iv.rsigma_chiint[i];
+            neff   = iv.neff_chiint[i];
+            qv     = iv.q_chiint[i];
+            if(i>0)
+                chi_im1 = iv.chiT_chiint[i-1];
+            else
+                chi_im1 = 0.0;
+
+//            deltachi = chi - chiprev;
+            deltachi = chi - chi_im1;
+#ifdef OPENMPCODE
+            Bm(cmd, gd, chi, z , Dp, rsigma, neff, BmVectors);
+#else
+            Bm(cmd, gd, chi, z , Dp, rsigma, neff);
+#endif
+            
+            for(int m=0; m<NumMoments; m++){
+//#ifdef OPENMPCODE
+//#pragma omp for nowait schedule(dynamic)
+//#endif
+                for(int ij=0; ij<iv.Nell*iv.Nell ; ij++) {
+#ifdef OPENMPCODE
+                    BmvectorsB[m][ij] = pow(qv,3.)/pow(chi,4.) * BmVectors[m][ij];
+#else
+                    BmvectorsB[m][ij] = pow(qv,3.)/pow(chi,4.) * iv.BmVectors[m][ij];
+#endif
                 }
             }
-            deltachi = chi;
-        }
-        
-        for(int m=0; m<NumMoments; m++) {
-            for(int ij=0; ij<iv.Nell*iv.Nell ; ij++){
-                iv.BmVectorsp[m][ij] +=  0.5*(BmvectorsA[m][ij]
-                              +BmvectorsB[m][ij])* deltachi;
+            
+            if(i==0){
+                for(int m=0; m<NumMoments; m++)
+                    for(int ij=0; ij<iv.Nell*iv.Nell ; ij++)
+                        BmvectorsA[m][ij] = BmvectorsB[m][ij];
+                deltachi = chi;
             }
-        }
+//            deltachi = chi;
 
-        for(int m=0; m<NumMoments; m++) {
-        for(int ij=0; ij<iv.Nell*iv.Nell ; ij++){
-            BmvectorsA[m][ij] = BmvectorsB[m][ij];
-        }
-        }
-        chiprev = chi;
-        
-    // TEST
-    //~ FILE *fp;
-    //~ char str[100];
-    //~ int ii;
-    //~ sprintf(str,"%s/step_%d_Bm0diag.txt",cmd.path_Bells,i);
-    //~ fp = fopen (str, "w+");
-        //~ //for(int ij=0; ij<iv.Nell*iv.Nell ; ij++){
+#ifdef OPENMPCODE
+            for(int m=0; m<NumMoments; m++)
+                for(int ij=0; ij<iv.Nell*iv.Nell ; ij++)
+                    BmVectorsp[m][ij] += 0.5*(BmvectorsA[m][ij]
+                                            +BmvectorsB[m][ij])* deltachi;
+#else
+            for(int m=0; m<NumMoments; m++)
+                for(int ij=0; ij<iv.Nell*iv.Nell ; ij++)
+                    iv.BmVectorsp[m][ij] += 0.5*(BmvectorsA[m][ij]
+                                            +BmvectorsB[m][ij])* deltachi;
+#endif
+
+            for(int m=0; m<NumMoments; m++)
+                for(int ij=0; ij<iv.Nell*iv.Nell ; ij++)
+                    BmvectorsA[m][ij] = BmvectorsB[m][ij];
+
+//            chiprev = chi;
+            
+            // TEST
+            //~ FILE *fp;
+            //~ char str[100];
+            //~ int ii;
+            //~ sprintf(str,"%s/step_%d_Bm0diag.txt",cmd.path_Bells,i);
+            //~ fp = fopen (str, "w+");
+            //~ //for(int ij=0; ij<iv.Nell*iv.Nell ; ij++){
             //~ //fprintf(fp, "%15e \n", BmvectorsA[0][ij]);
-        //~ //}
-        //~ for(int kk=0; kk<iv.Nell ; kk++){
+            //~ //}
+            //~ for(int kk=0; kk<iv.Nell ; kk++){
             //~ ii = kk * iv.Nell;
             //~ fprintf(fp, "%15e \n", iv.BmVectors[0][ii]);
-        //~ }
-    //~ fclose (fp);
-    //
+            //~ }
+            //~ fclose (fp);
+            //
+            
+            //        if(cmd->chatty>1) printf("loop integration time (%d) = %lf \n",
+            //                        i, (double)(clock() - localtime) / CLOCKS_PER_SEC );
+//            verb_print_min_info(cmd->verbose, cmd->verbose_log, gd->outlog,
+//                                "\t%s: loop integration time (%d) = %lf \n",
+//                                routineName,
+//                                i, (double)(clock() - localtime) / CLOCKS_PER_SEC);
+            //        verb_print_debug(cmd->verbose_log,
+            //                         "\t%s: loop integration time (%d) = %lf \n",
+            //                         routineName,
+            //                         i, (double)(clock() - localtime) / CLOCKS_PER_SEC);
+        } // end loop i // end pragma for loop
 
-//        if(cmd->chatty>1) printf("loop integration time (%d) = %lf \n",
-//                        i, (double)(clock() - localtime) / CLOCKS_PER_SEC );
-//        verb_print_min_info(cmd->verbose, cmd->verbose_log, gd->outlog,
-//                            "\t%s: loop integration time (%d) = %lf \n",
-//                            routineName,
-//                           i, (double)(clock() - localtime) / CLOCKS_PER_SEC);
-        verb_print_debug(cmd->verbose_log,
-                         "\t%s: loop integration time (%d) = %lf \n",
-                         routineName,
-                         i, (double)(clock() - localtime) / CLOCKS_PER_SEC);
-    }
+#ifdef OPENMPCODE
+#pragma omp critical
+        {
+            for(int m=0; m<NumMoments; m++)
+                for(int ij=0; ij<iv.Nell*iv.Nell ; ij++)
+                    iv.BmVectorsp[m][ij] += BmVectorsp[m][ij];
+        }
+#endif
+
+#ifdef OPENMPCODE
+    } // // end pragma omp parallel
+#endif
 
     // TEST
     char buf[BUFFERSIZE];
@@ -185,6 +272,61 @@ int Bmell(struct cmdline_data* cmd, struct  global_data* gd)
 }
 
 
+#ifdef OPENMPCODE
+int Bm(struct cmdline_data* cmd, struct  global_data* gd,
+        double chi, double z, double Dp, double r_sigma, double n_eff, double **BmVectors)
+{
+    double k1,k2,varphi,w,k3,BT, ell1,ell2;
+    double *xGL, *wGL;
+    int m=0;
+    int NumMoments=cmd->mMax+1;
+    double val[NumMoments];
+    double EFTctr;
+    double alphaEFT;
+    
+    xGL = malloc(cmd->GLpoints * sizeof(double));
+    wGL = malloc(cmd->GLpoints * sizeof(double));
+    gaussleg(-m_PI, m_PI, xGL, wGL, cmd->GLpoints);
+
+    alphaEFT=-3.0;  // =cmd.alphaEFT
+
+    EFTctr=alphaEFT*pow(Dp,2);
+
+    
+    for(int i=0; i<iv.Nell; i++){
+    for(int j=i; j<iv.Nell; j++){
+        ell1=iv.ellT[i];
+        ell2=iv.ellT[j];
+        k1 = ell1/chi;
+        k2 = ell2/chi;
+        for(int m=0;m<NumMoments;m++) val[m] = 0.0;
+        
+        for(int i=0; i<cmd->GLpoints;i++){
+            varphi = xGL[i];
+            w   = wGL[i];
+            k3  = sqrt( k1*k1 + k2*k2 - 2.*k1*k2 * cos(varphi) );
+            if (cmd->tree_level==1){
+                BT = Bispec_tree(cmd, gd, k1, k2, k3, Dp);
+            } else if (cmd->tree_level==2){
+                BT = Bispec_P2(cmd, gd, k1, k2, k3, Dp);
+            } else if (cmd->tree_level==3){
+                BT  = Bispec_tree_EFT(cmd, gd, k1, k2, k3, Dp, EFTctr);
+            } else {
+                BT  = Bispec_Takahashi(cmd, gd, k1, k2, k3, z, Dp, r_sigma, n_eff);
+            }
+            for(int m=0;m<NumMoments;m++) val[m] =  val[m] + w*BT*cos(m*varphi);
+        }
+
+        for(int m=0; m<NumMoments; m++){
+            BmVectors[m][i*iv.Nell + j] = val[m]/(2*m_PI);
+            if(j!=i) BmVectors[m][j*iv.Nell + i] = val[m]/(2*m_PI);
+        }
+    }
+    }
+
+    return SUCCESS;
+}
+#else
 int Bm(struct cmdline_data* cmd, struct  global_data* gd,
         double chi, double z, double Dp, double r_sigma, double n_eff)
 {
@@ -238,7 +380,7 @@ int Bm(struct cmdline_data* cmd, struct  global_data* gd,
 
     return SUCCESS;
 }
-
+#endif
 
 int BmKspace(struct cmdline_data* cmd, struct  global_data* gd,
               int Maxm, double kmin, double kmax, int Nk,
@@ -363,12 +505,14 @@ void gaussleg(double x1, double x2, double xGL[], double wGL[], int n)
 int read_inputpk(struct cmdline_data* cmd, struct  global_data* gd)
 //Extrapolation not yet implemented
 {
+    string routineName = "read_inputpk";
     FILE *fp;
     gd->n_data=0;
     fp=fopen(cmd->fnamePS,"r");   // linear P(k) table
     
     if (NULL == fp) {
-        printf("\n\nlinear power spectrum can't be opened \n\n");
+//        printf("\n\nlinear power spectrum can't be opened \n\n");
+        error("\n%s: linear power spectrum can't be opened \n\n", routineName);
     }
     
     if(fp!=NULL){   // input: k[h/Mpc]   P(k)[(Mpc/h)^3]

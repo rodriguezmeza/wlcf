@@ -24,7 +24,7 @@ $(info )
 
 MAIN = main.o
 
-OBJS = main.o background.o functions.o libs.o \
+OBJS = main.o wlcf.o background.o functions.o libs.o \
 		procedures.o tests.o twobessel.o utils.o \
 		zetam.o
 

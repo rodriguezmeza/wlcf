@@ -19,7 +19,7 @@ export F90=ifort
 
 2. Go to directory: 
 
-cd $HOME/NagBody_pkg/NagBody_sources/additional_libs/gsl
+cd $HOME/.../gsl
 
 3. Unpack file:
 

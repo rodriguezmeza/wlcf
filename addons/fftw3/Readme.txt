@@ -30,6 +30,7 @@ export F90=ifort
 
 2. Unpack file:
 
+cd $HOME/.../fftw3
 tar xvf fftw-3.3.10.tar.gz
 
 3. Change to directory:

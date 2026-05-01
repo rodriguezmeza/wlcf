@@ -338,17 +338,16 @@ double window(double x, int i)
 
 
 //   Linear growth function
-double Dplusf(struct cmdline_data* cmd, struct  global_data* gd,
-              double z)
 // linear growth factor at z (not normalized at z=0)
-{
+double Dplusf(struct cmdline_data* cmd, struct  global_data* gd,
+              double z) {
     string routineName = "Dplusf";
-  int i,j,n;
-  double a,a0,x,h,yp;
-  double k1[2],k2[2],k3[2],k4[2],y[2],y2[2],y3[2],y4[2];
+    int i,j,n;
+    double a,a0,x,h,yp;
+    double k1[2],k2[2],k3[2],k4[2],y[2],y2[2],y3[2],y4[2];
 
-    debug_tracking_s("001", routineName);
-    debug_tracking_r("002", z);
+    debug_tracking_s_Dplusf("001", routineName);
+    debug_tracking_r_Dplusf("002", z);
 
   a=1./(1.+z);
   a0=1./1100.;
@@ -382,8 +381,8 @@ double Dplusf(struct cmdline_data* cmd, struct  global_data* gd,
     yp=y[0];
   }
 
-    debug_tracking_r("003", a*y[0]);
-    debug_tracking_s("004... final", routineName);
+    debug_tracking_r_Dplusf("003", a*y[0]);
+    debug_tracking_s_Dplusf("004... final", routineName);
 
     return a*y[0];
 }

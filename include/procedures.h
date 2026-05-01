@@ -14,9 +14,15 @@ int allocate_iv(struct cmdline_data* cmd, struct  global_data* gd);
 
 //void Bmell(void);
 int Bmell(struct cmdline_data* cmd, struct  global_data* gd);
+
+#ifdef OPENMPCODE
+int Bm(struct cmdline_data* cmd, struct  global_data* gd,
+       double chi, double z, double Dp, double r_sigma, double n_eff, double **BmVectors);
+#else
 //void Bm(double chi, double z, double Dp, double r_sigma, double n_eff);
 int Bm(struct cmdline_data* cmd, struct  global_data* gd,
        double chi, double z, double Dp, double r_sigma, double n_eff);
+#endif
 
 // others
 //void BmKspace(int Maxm, double kmin, double kmax, int Nk, int GLpoints, double z, double Dp, double r_sigma, double n_eff);
@@ -51,6 +57,8 @@ int testTakahashiBispectrum(struct cmdline_data* cmd,
                             struct  global_data* gd);
 
 
+
+//global int MainLoop(struct cmdline_data* cmd, struct  global_data* gd);
 
 
 //B added by bolas...

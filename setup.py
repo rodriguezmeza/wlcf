@@ -85,6 +85,8 @@ wlcfpy_ext = Extension("wlcfpy", [os.path.join(wlcfpy_folder, "wlcfpy.pyx")],
 #B GSLINTERNAL = 1 and CFITSIOLIBON = 1 :: comment these two lines
 #B GSLINTERNAL = 0 and CFITSIOLIBON = 0 :: uncomment these two lines
                             '/Users/mar/NagBody_pkg/local/fftw3/lib/',
+# for Nersc use: module load cray-fftw/3.3.10.3 and then comment above line and uncomment:
+#                            '/opt/cray/pe/fftw/3.3.10.3/x86_milan/lib',
                             '/Users/mar/NagBody_pkg/local/gsl/lib/'
                            ],
                            extra_link_args=['-lgomp', '-lz'],

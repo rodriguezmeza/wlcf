@@ -86,6 +86,16 @@ function;
 #define debug_tracking_r
 #define debug_tracking_i
 #endif // ! DEBUGTRACKING
+
+#ifdef DEBUGTRACKING_Dplusf
+#define debug_tracking_s_Dplusf(track_step, extra)                              \
+  verb_print_debug(1, "Track step (%s): %s\n", track_step, extra);
+#define debug_tracking_r_Dplus(track_step, extra)                              \
+  verb_print_debug(1, "Track step (%s): %g\n", track_step, extra);
+#else // ! DEBUGTRACKING :: dummies...
+#define debug_tracking_s_Dplusf
+#define debug_tracking_r_Dplusf
+#endif
 //E
 
 #endif // ! _common_defs_h
