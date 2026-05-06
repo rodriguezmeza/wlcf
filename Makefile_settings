@@ -18,7 +18,7 @@ GSLINTERNAL = 0
 # For an OpenMP machine could be important to set (maximum number of threads to use):
 # export OMP_NUM_THREADS=8
 # Set following line to 1 for OPENMP parallel version, or 0 to switch it off
-OPENMPMACHINE = 0
+OPENMPMACHINE = 1
 #
 # If you have at least one addon then set to 1:
 ADDONSON = 1
