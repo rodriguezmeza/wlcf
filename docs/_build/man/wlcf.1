@@ -1,0 +1,1343 @@
+.\" Man page generated from reStructuredText.
+.
+.
+.nr rst2man-indent-level 0
+.
+.de1 rstReportMargin
+\\$1 \\n[an-margin]
+level \\n[rst2man-indent-level]
+level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
+-
+\\n[rst2man-indent0]
+\\n[rst2man-indent1]
+\\n[rst2man-indent2]
+..
+.de1 INDENT
+.\" .rstReportMargin pre:
+. RS \\$1
+. nr rst2man-indent\\n[rst2man-indent-level] \\n[an-margin]
+. nr rst2man-indent-level +1
+.\" .rstReportMargin post:
+..
+.de UNINDENT
+. RE
+.\" indent \\n[an-margin]
+.\" old: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.nr rst2man-indent-level -1
+.\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.in \\n[rst2man-indent\\n[rst2man-indent-level]]u
+..
+.TH "WLCF" "1" "May 06, 2026" "" "WLCF"
+.SH NAME
+wlcf \- WLCF 1.0.0
+.SH OVERVIEW
+.SS wlcf: Weak Lensing Correlation Function
+.sp
+\fBAuthors:\fP A. Aviles, J.C. Hidalgo, E.A. Moreno\-Alcala, G. Niz, S. Ramirez, Mario A. Rodriguez\-Meza, S. Samario\-Nava
+.sp
+For download and information, see \X'tty: link https://github.com/rodriguezmeza/wlcf.git'\fI\%https://github.com/rodriguezmeza/wlcf.git\fP\X'tty: link' .
+.SS Introduction
+.sp
+\fBwlcf\fP is a C code designed to compute cosmological correlation functions using theoretical frameworks such as Standard Perturbation Theory (SPT), Effective Field Theory (EFT), and the Halo Model. Currently, it focuses on the computation of the \fBthree\-point correlation function (3PCF)\fP for galaxy weak lensing convergence in a plane\-wave expansion.
+Paper available at (\X'tty: link https://arxiv.org/abs/2408.16847'\fI\%https://arxiv.org/abs/2408.16847\fP\X'tty: link').
+.SS Compiling and getting started
+.sp
+Download the code by cloning it from:
+\X'tty: link https://github.com/rodriguezmeza/wlcf.git'\fI\%https://github.com/rodriguezmeza/wlcf.git\fP\X'tty: link' .
+.sp
+\fBDependencies:\fP
+\fIwlcf\fP optionally requires \fBGSL (GNU Scientific Library)\fP and \fBFFTW3\fP installed in your system. Make sure to adapt the paths to these libraries in \fIMakefile_machine\fP\&.
+.sp
+Tu run the code go to the \fIwlcf\fP directory and compile the code:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+$ cd wlcf
+$ make clean
+$ make all
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+The code has been tested with modern versions of \fIgcc\fP\&. OpenMP support is optional but recommended for parallel execution. In addition, the code provides a Python wrapper that allows it to be run and controlled directly from Python.
+.sp
+To verify that the code runs correctly:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+$ cd tests
+$ ./wlcf
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+This will execute the code using default parameters. A directory named \fIOutput\fP will be created inside \fItests\fP, where all results are stored, including:
+.INDENT 0.0
+.IP \(bu 2
+output data files (e.g., \fIzetam*\fP, \fIBmells*\fP, \fIBnk*\fP)
+.IP \(bu 2
+a log file inside \fIOutput/tmp\fP
+.UNINDENT
+.sp
+You can consult man page:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+$ man ../docs/wlcf.1
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+or open with a browser the html file: docs/man/wlcf.html
+.SS License
+.sp
+wlcf is written by A. Aviles et al., and is distributed under the \X'tty: link https://github.com/rodriguezmeza/wlcf/blob/main/LICENSE'\fI\%MIT license\fP\X'tty: link'\&. If you use this program in research work that results in publications, please cite the following paper:
+.sp
+\X'tty: link https://arxiv.org/abs/2408.16847'\fI\%Abraham Arvizu et al., arXiv:2048.16847\fP\X'tty: link'
+.SS Acknowledgements
+.sp
+wlcf use/is based on the following codes or projects:
+.INDENT 0.0
+.IP \(bu 2
+\X'tty: link https://github.com/xfangcosmo/2DFFTLog'\fI\%FFTLog\fP\X'tty: link'
+.IP \(bu 2
+\X'tty: link https://cosmo.phys.hirosaki-u.ac.jp/takahasi/codes_e.htm'\fI\%The BiHaloFit model of Takahashi\fP\X'tty: link'
+.IP \(bu 2
+\X'tty: link https://home.ifa.hawaii.edu/users/barnes/zeno/index.html'\fI\%Zeno\fP\X'tty: link'
+.IP \(bu 2
+\X'tty: link https://numerical.recipes/'\fI\%Numerical recipies\fP\X'tty: link'
+.IP \(bu 2
+\X'tty: link https://www.gnu.org/software/gsl/'\fI\%GSL\fP\X'tty: link'
+.IP \(bu 2
+\X'tty: link https://github.com/lesgourg/class_public'\fI\%CLASS\fP\X'tty: link'
+.UNINDENT
+.SH WLCF INSTALLATION
+.sp
+The wlcf code is a C\-based implementation for computing higher\-order correlation functions in cosmology, with optional support for parallel execution via OpenMP and a Python interface for flexible workflows.
+This section guides you through installing the code, compiling it, and running a first test example.
+.SS Requirements
+.sp
+TThe code requires:
+.INDENT 0.0
+.IP \(bu 2
+A C compiler (recommended: \fIgcc >= 10\fP)
+.IP \(bu 2
+Optional libraries:
+.INDENT 2.0
+.IP \(bu 2
+\fBGSL\fP (GNU Scientific Library)
+.IP \(bu 2
+\fBFFTW3\fP
+.UNINDENT
+.IP \(bu 2
+Python (optional, for the wrapper interface):
+.INDENT 2.0
+.IP \(bu 2
+\fInumpy\fP
+.IP \(bu 2
+\fIcython\fP
+.UNINDENT
+.UNINDENT
+.SS Compilation
+.sp
+Clone the repository:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+git clone https://github.com/your\-repo/wlcf.git
+cd wlcf
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+Edit the file \fBMakefile_machine\fP if needed to specify library paths (GSL, FFTW).
+.sp
+Compile the code:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+make clean
+make
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+If GSL is not available, it can be disabled in \fIMakefile_settings\fP by setting:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+USEGSL = 0
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+If compilation is successful, the executable \fBwlcf\fP will be created in the main directory.
+.sp
+To verify the installation:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+cd tests
+\&./wlcf
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+This runs the code using default parameters.
+.sp
+After execution, the following will be generated:
+.INDENT 0.0
+.IP \(bu 2
+\fIOutput/\fP directory
+.IP \(bu 2
+Correlation function files:
+.INDENT 2.0
+.IP \(bu 2
+\fIzetam*\fP
+.IP \(bu 2
+\fIBmells*\fP
+.IP \(bu 2
+\fIBnk*\fP
+.UNINDENT
+.IP \(bu 2
+Log files (inside \fIOutput/tmp\fP)
+.IP \(bu 2
+Parameter file: \fIparameters_null\-cballs\-usedvalues*\fP
+.UNINDENT
+.sp
+This parameter file can be used as a template for custom runs.
+.sp
+\fBPython wrapper\fP
+.sp
+The code includes a Python interface for easier control and integration.
+.sp
+Build the wrapper
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+make all
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+Install dependencies if needed:
+.sp
+You can use the wrapper as
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+from wlcfpy import wlcf
+
+w = wlcf()
+w.set(numberThreads=4, verbose=1)
+w.Run()
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+\fBParallel execution (OpenMP)\fP
+.sp
+The code supports shared\-memory parallelism using OpenMP.
+.sp
+To control the number of threads:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+export OMP_NUM_THREADS=8
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+The code may also set the number of threads internally using the parameter \fInumberThreads\fP\&.
+.sp
+\fBHPC example (Perlmutter)\fP
+.sp
+On \fBNERSC Perlmutter\fP, a typical workflow in an interactive node is:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+module load gcc
+salloc \-N 1 \-C cpu \-q interactive \-t 01:00:00
+export OMP_NUM_THREADS=32
+cd wlcf/tests
+\&../wlcf
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+\fBNotes\fP
+.INDENT 0.0
+.IP \(bu 2
+If compilation fails, verify library paths in \fIMakefile_machine\fP
+.IP \(bu 2
+OpenMP requires a compatible compiler (e.g., \fIgcc\fP with \fI\-fopenmp\fP)
+.IP \(bu 2
+Performance may saturate at high thread counts depending on the workload
+.IP \(bu 2
+For large runs, always use compute nodes rather than login nodes
+.UNINDENT
+.SH PARAMETERS
+.sp
+This section describes the various parameters \fBwlcf\fP needs for controlling
+the computation of the three\-point correlation function (3PCF) for weak lensing convergence.
+.SS Parameters related to the cosmological model
+.INDENT 0.0
+.TP
+.B z
+(float) Redshift at which the correlation functions are evaluated.
+.TP
+.B h
+(float) Dimensionless Hubble parameter.
+.TP
+.B sigma8
+(float) Normalization of the matter power spectrum.
+.TP
+.B Omb
+(float) Baryon density parameter.
+.TP
+.B Omc
+(float) Cold dark matter density parameter.
+.TP
+.B Omnu
+(float, default=0.0) Massive neutrino density parameter.
+.TP
+.B ns
+(float) Spectral index of the primordial power spectrum.
+.TP
+.B w
+(float, default=\-1.0) Dark energy equation of state parameter.
+.UNINDENT
+.SS Parameters to control the input power spectrum
+.INDENT 0.0
+.TP
+.B fnamePS
+(str) [alias: ps] File containing the linear matter power spectrum ( P(k) ).
+.UNINDENT
+.sp
+Use it as:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+fnamePS=./input/linear_pk.txt
+.EE
+.UNINDENT
+.UNINDENT
+.SS Parameters related to the weak lensing kernel
+.INDENT 0.0
+.TP
+.B Wg
+(int, default=0) Controls how the lensing kernel is defined.
+.UNINDENT
+.INDENT 0.0
+.IP \(bu 2
+\fB0\fP = Dirac delta at the redshift bin
+.IP \(bu 2
+\fB1\fP = Read kernel from file
+.UNINDENT
+.INDENT 0.0
+.TP
+.B fWgchi
+(str) [alias: fwgchi] File containing the weak lensing kernel ( W_g(chi) ).
+.UNINDENT
+.sp
+Use it as:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+fWgchi=./input/Wg_Takahashi_z05078.txt
+.EE
+.UNINDENT
+.UNINDENT
+.SS Parameters controlling the model and numerical setup
+.INDENT 0.0
+.TP
+.B tree_level
+(int, default=3) [alias: tlev] Model used for the bispectrum calculation.
+.UNINDENT
+.INDENT 0.0
+.IP \(bu 2
+\fB1\fP = Standard Perturbation Theory (SPT)
+.IP \(bu 2
+\fB2\fP = Tree\-level approximation
+.IP \(bu 2
+\fB3\fP = Effective Field Theory (EFT)
+.IP \(bu 2
+\fB4\fP = Halo Model (HM)
+.UNINDENT
+.INDENT 0.0
+.TP
+.B zbin
+(float) Redshift bin used in the projection.
+.TP
+.B mMax
+(int) Maximum multipole order for the expansion.
+.TP
+.B chiQuadSteps
+(int) [alias: chiqst] Number of integration steps over comoving distance.
+.TP
+.B GLpoints
+(int) [alias: gl] Number of Gauss–Legendre points.
+.TP
+.B Nell
+(int) Number of angular multipoles.
+.TP
+.B ellmin
+(float) Minimum multipole value.
+.TP
+.B ellmax
+(float) Maximum multipole value.
+.UNINDENT
+.SS Parameters to control output files
+.INDENT 0.0
+.TP
+.B rootDir
+(str, default=”Output”) [alias: root] Directory where output files will be written.
+.TP
+.B prefix
+(str, default=”
+.nf
+run1_
+.fi
+”) [alias: pre] Prefix for output file names.
+.TP
+.B path_Bells
+(str, default=”Bell_outputs”) [alias: bellout] Directory where angular correlation functions are stored.
+.TP
+.B writevectors
+(bool, default=true) Whether to write intermediate vectors.
+.UNINDENT
+.SS Miscellaneous parameters
+.INDENT 0.0
+.TP
+.B verbose
+(int, default=2) [alias: verb] Controls the amount of information printed to the terminal.
+.UNINDENT
+.INDENT 0.0
+.IP \(bu 2
+0 = no output unless there is an error
+.IP \(bu 2
+1 = warnings
+.IP \(bu 2
+2 = progress information
+.IP \(bu 2
+3 = debugging output
+.UNINDENT
+.INDENT 0.0
+.TP
+.B verbose_log
+(int, default=1) [alias: verblog] Controls logging to file inside \fIOutput/tmp\fP\&.
+.TP
+.B chatty
+(int, default=2) Additional verbosity level for internal messages.
+.TP
+.B numberThreads
+(int, default=4) [alias: nthreads] Number of OpenMP threads used during execution.
+.UNINDENT
+.sp
+It is required to enable OpenMP by setting:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+OPENMPMACHINE = 1
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+in \fBMakefile_settings\fP and recompiling the code.
+.INDENT 0.0
+.TP
+.B options
+(str, default=””) [alias: opt] Additional options controlling code behavior.
+.UNINDENT
+.INDENT 0.0
+.IP \(bu 2
+It is not necessary to specify all parameters. Only the relevant ones need to be provided. The rest will take default values.
+.IP \(bu 2
+A parameter file is automatically generated after each run:
+.INDENT 2.0
+.INDENT 3.5
+.sp
+.EX
+Output/parameters_null\-cballs\-usedvalues
+.EE
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.sp
+This file can be used as a template for custom configurations.
+.INDENT 0.0
+.IP \(bu 2
+When specifying \fIrootDir\fP, avoid using \fI\&./\fP at the beginning or \fI/\fP at the end if it is a local directory.
+.UNINDENT
+.SH LINEAR POWER SPECTRUM FILES
+.sp
+This section describes the format of the linear power spectrum required to compute correlation functions using \fBwlcf\fP\&.
+.sp
+\fBStandard formats\fP
+.INDENT 0.0
+.TP
+.B columns\-ascii
+The linear power spectrum is provided as an ASCII file with two columns:
+.UNINDENT
+.INDENT 0.0
+.IP \(bu 2
+\fBk\fP = wavenumber in units of ( h ,mathrm{Mpc}^{\-1} )
+.IP \(bu 2
+\fBP(k)\fP = linear matter power spectrum in units of ( (mathrm{Mpc}/h)^3 )
+.UNINDENT
+.sp
+Each row corresponds to a value of ( k ) and its associated power spectrum.
+.sp
+Example:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+# k [h/Mpc]    P(k) [(Mpc/h)^3]
+1.000000e\-03   2.345678e+04
+2.000000e\-03   1.987654e+04
+5.000000e\-03   1.234567e+04
+\&...
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+\fBUsage in wlcf\fP
+.sp
+To use a power spectrum file, specify:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+fnamePS=./input/linear_pk.txt
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+The linear power spectrum can be generated using external Boltzmann solvers such as:
+.INDENT 0.0
+.IP \(bu 2
+\fBCAMB\fP
+.IP \(bu 2
+\fBCLASS\fP
+.UNINDENT
+.sp
+These tools allow you to compute ( P(k) ) for a given cosmological model.
+.sp
+Make sure to export the power spectrum at the desired redshift and in the correct units.
+.SH PRE/POST PROCESSING
+.sp
+This section describes the various pre/pos processing for controlling
+what the \fIwlcf\fP before/after main processing:
+.SS \fBPre\-processing\fP
+.sp
+Pre\-processing involves preparing all required inputs before running \fBwlcf\fP\&.
+.sp
+Typical tasks include:
+.INDENT 0.0
+.IP \(bu 2
+Generating the \fBlinear power spectrum\fP ( P(k) ) using external tools (e.g., CAMB or CLASS)
+.IP \(bu 2
+Preparing the \fBweak lensing kernel\fP file (if \fIWg=1\fP)
+.IP \(bu 2
+Setting cosmological parameters consistently with the input data
+.IP \(bu 2
+Organizing input files into accessible directories
+.UNINDENT
+.sp
+The accuracy of the final correlation functions strongly depends on the quality and consistency of the input power spectrum and cosmological parameters.
+.SS \fBPost\-processing\fP
+.sp
+Post\-processing refers to analyzing and visualizing the outputs produced by \fBwlcf\fP\&.
+.sp
+Typical tasks include:
+.INDENT 0.0
+.IP \(bu 2
+Reading output files such as:
+.INDENT 2.0
+.IP \(bu 2
+\fIzetam*\fP (angular correlation functions)
+.IP \(bu 2
+\fIBmells*\fP (projected bispectrum)
+.IP \(bu 2
+\fIBnk*\fP (bispectrum in Fourier space)
+.UNINDENT
+.IP \(bu 2
+Plotting results (e.g., multipoles, angular correlations)
+.IP \(bu 2
+Comparing results across different cosmologies
+.IP \(bu 2
+Converting outputs into formats suitable for further analysis
+.UNINDENT
+.sp
+\fBNotes\fP
+.INDENT 0.0
+.IP \(bu 2
+Pre\-processing is external to \fBwlcf\fP; the code assumes inputs are already prepared.
+.IP \(bu 2
+Post\-processing is flexible and depends on the scientific goals.
+.IP \(bu 2
+For large parameter scans, combining the Python interface with HPC resources is recommended.
+.UNINDENT
+.SH ADDON’S
+.sp
+This section describes how to extend the functionality of \fBwlcf\fP by adding new features, models, or utilities to the codebase.
+.sp
+The modular structure of the code allows users to include additional functionality through custom header and source files.
+.sp
+\fBInclude files\fP
+.sp
+Header files define the interface of new functionalities and must be placed in the appropriate include directories.
+.sp
+To add new features:
+.INDENT 0.0
+.IP 1. 3
+Create a header file (e.g., \fImy_module.h\fP)
+.IP 2. 3
+Place it in one of the include directories:
+.INDENT 3.0
+.INDENT 3.5
+.sp
+.EX
+include/
+addons/addons_include/
+.EE
+.UNINDENT
+.UNINDENT
+.IP 3. 3
+Declare functions, structures, or parameters inside the header.
+.UNINDENT
+.sp
+Example
+.sp
+c:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+#ifndef MY_MODULE_H
+#define MY_MODULE_H
+void my_new_function(double *input, double *output);
+#endif
+.EE
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.IP 4. 3
+Include the header in the relevant source files:
+.UNINDENT
+.sp
+c:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+#include \(dqmy_module.h\(dq
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+\fBSource files\fP
+.sp
+Source files implement the functionality declared in the header files.
+.sp
+To add a new module:
+.INDENT 0.0
+.IP 1. 3
+Create a source file (e.g., \fImy_module.c\fP)
+.IP 2. 3
+Place it in one of the source directories:
+.INDENT 3.0
+.INDENT 3.5
+.sp
+.EX
+source/
+addons/
+.EE
+.UNINDENT
+.UNINDENT
+.IP 3. 3
+Implement the functions:
+.UNINDENT
+.sp
+c:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+#include \(dqmy_module.h\(dq
+void my_new_function(double *input, double *output) {
+// Example computation
+*output = input[0] * 2.0;}
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+\fBCompilation\fP
+.sp
+To ensure the new files are compiled:
+.INDENT 0.0
+.IP \(bu 2
+Add the source file to the build system (if not automatically included)
+.IP \(bu 2
+Modify \fIMakefile\fP or \fIMakefile_machine\fP if necessary
+.UNINDENT
+.sp
+Example (if manual inclusion is needed):
+.sp
+make:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+SRC += source/my_module.c
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+\fBIntegration\fP
+.sp
+To integrate the new functionality into \fBwlcf\fP:
+.INDENT 0.0
+.IP \(bu 2
+Call your new functions from existing modules (e.g., in \fIprocedures.c\fP)
+.IP \(bu 2
+Ensure parameters are passed correctly
+.IP \(bu 2
+Update relevant headers if new parameters are introduced
+.UNINDENT
+.SH PYTHON INTERFACE
+.sp
+This section describes how to interact with \fBwlcf\fP using Python, either through the command line interface or via the Cython wrapper.
+.sp
+\fBUsing command line interface\fP
+.sp
+The simplest way to run \fBwlcf\fP from Python is by calling the executable through the system shell.
+.sp
+Example
+.sp
+python:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+import os
+
+os.system(\(dq../wlcf z=0.5 sigma8=0.8 fnamePS=./input/linear_pk.txt\(dq)
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+Alternatively, using \fIsubprocess\fP :
+.sp
+python:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+import subprocess
+
+subprocess.run([
+    \(dq../wlcf\(dq,
+    \(dqz=0.5\(dq,
+    \(dqsigma8=0.8\(dq,
+    \(dqfnamePS=./input/linear_pk.txt\(dq])
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+This approach allows you to:
+.INDENT 0.0
+.IP \(bu 2
+run parameter scans
+.IP \(bu 2
+automate workflows
+.IP \(bu 2
+integrate wlcf into larger pipelines
+.UNINDENT
+.sp
+When using the command line interface, parameters must be passed as \fIkey=value\fP without spaces.
+.sp
+\fBCython interface\fP
+.sp
+The code provides a \fBCython wrapper\fP that allows direct interaction with wlcf from Python without invoking the executable.
+.sp
+example
+.sp
+python:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+from wlcfpy import wlcf
+
+w = wlcf()
+
+w.set(
+    numberThreads=4,
+    verbose=1,
+    fnamePS=\(dq./input/linear_pk.txt\(dq)
+
+w.Run()
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+\fBNotes\fP
+.INDENT 0.0
+.IP \(bu 2
+The working directory should contain the required input files (e.g., power spectrum).
+.IP \(bu 2
+Output files are written in the same way as the C executable.
+.IP \(bu 2
+Some parameters (e.g., number of threads) may be controlled both via Python and internally by the code.
+.UNINDENT
+.SH HANDS ON
+.sp
+This section provides a practical example of how to use \fBwlcf\fP from a
+Python notebook. The example follows a complete workflow:
+.INDENT 0.0
+.IP 1. 3
+Generate a linear matter power spectrum using CAMB.
+.IP 2. 3
+Run \fBwlcf\fP through the Python wrapper.
+.IP 3. 3
+Plot the resulting 3\-point correlation function multipoles.
+.IP 4. 3
+Compare different theoretical models.
+.UNINDENT
+.sp
+The notebook associated with this tutorial can be used as a starting point
+for interactive runs and parameter exploration.
+.SS Setting up the working directory
+.sp
+First, import the required Python packages and move to the \fBtests\fP directory
+of the repository:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+import os
+import numpy as np
+import matplotlib.pyplot as plt
+
+import camb
+from camb import model
+from wlcfpy import wlcf
+
+WLCF_TESTS_DIR = \(dq/path/to/wlcf/tests\(dq
+os.chdir(WLCF_TESTS_DIR)
+
+os.makedirs(\(dqinput\(dq, exist_ok=True)
+os.makedirs(\(dqOutput\(dq, exist_ok=True)
+os.makedirs(\(dqBell_outputs\(dq, exist_ok=True)
+.EE
+.UNINDENT
+.UNINDENT
+.SS Generating the linear power spectrum
+.sp
+The linear matter power spectrum can be generated with CAMB. In this example
+we use a T17\-like cosmology at redshift z = 0.5078:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+def make_camb_linear_pk(
+    output_file=\(dq./input/linear_pk_camb_T17_z05078.txt\(dq,
+    z_pk=0.5078,
+    h=0.7,
+    Omb=0.046,
+    Omc=0.233,
+    Omnu=0.0,
+    ns=0.97,
+    sigma8=0.82,
+    w0=\-1.0,
+    kmin=1e\-4,
+    kmax=50.0,
+    npoints=1000,
+):
+
+    os.makedirs(os.path.dirname(output_file), exist_ok=True)
+
+    H0 = 100.0 * h
+    ombh2 = Omb * h**2
+    omch2 = Omc * h**2
+
+    pars = camb.CAMBparams()
+
+    # For now we assume massless neutrinos, consistent with Omnu = 0.
+    pars.set_cosmology(
+        H0=H0,
+        ombh2=ombh2,
+        omch2=omch2,
+    )
+
+    pars.InitPower.set_params(
+        ns=ns,
+        As=2.1e\-9
+    )
+
+    pars.set_dark_energy(w=w0)
+
+    # Linear power spectrum at the same redshift used by wlcf/zbin
+    pars.set_matter_power(
+        redshifts=[z_pk],
+        kmax=kmax
+    )
+
+    pars.NonLinear = model.NonLinear_none
+
+    # First run to compute sigma8 for the trial As
+    results = camb.get_results(pars)
+    sigma8_current = results.get_sigma8()[0]
+
+    # Rescale As so that CAMB matches the requested sigma8
+    As_rescaled = 2.1e\-9 * (sigma8 / sigma8_current) ** 2
+
+    pars.InitPower.set_params(
+        ns=ns,
+        As=As_rescaled
+    )
+
+    results = camb.get_results(pars)
+
+    kh, redshifts, pk = results.get_matter_power_spectrum(
+        minkh=kmin,
+        maxkh=kmax,
+        npoints=npoints,
+    )
+
+    pk_z = pk[0]
+
+    np.savetxt(
+        output_file,
+        np.column_stack([kh, pk_z]),
+        fmt=\(dq%.10e\(dq
+    )
+
+    print(f\(dqSaved linear P(k) at z={z_pk} to:\(dq)
+    print(output_file)
+    print(f\(dqsigma8 target  = {sigma8}\(dq)
+    print(f\(dqsigma8 CAMB    = {results.get_sigma8()[0]:.6f}\(dq)
+    print(f\(dqAs rescaled    = {As_rescaled:.6e}\(dq)
+
+    return output_file, kh, pk_z
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+The resulting file is passed to \fBwlcf\fP through the parameter \fBfnamePS\fP\&.
+.SS Running wlcf from Python
+.sp
+The code can be executed directly from Python using the \fBwlcfpy\fP wrapper:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+w = wlcf()
+w.set(
+    numberThreads=8,
+    verbose=2,
+    verbose_log=1,
+
+    z=0.5078,
+    h=0.7,
+    sigma8=0.82,
+    Omb=0.046,
+    Omc=0.233,
+    Omnu=0.0,
+    ns=0.97,
+    w=\-1.0,
+
+    fnamePS=\(dq./input/linear_pk_camb_T17_z05078.txt\(dq,
+    Wg=0,
+    fWgchi=\(dq./input/Wg_Takahashi_z05078.txt\(dq,
+
+    rootDir=\(dqOutput\(dq,
+    path_Bells=\(dqBell_outputs\(dq,
+    prefix=\(dqhalo_model_z05078_\(dq,
+
+    tree_level=4,
+    zbin=0.5078,
+    mMax=5,
+    chiQuadSteps=300,
+    GLpoints=64,
+    Nell=128,
+    ellmax=10000,
+    ellmin=0.001,
+    writevectors=0,
+    chatty=2,
+    options=\(dq\(dq
+)
+
+w.Run()
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+Here \fBtree_level=4\fP selects the Takahashi/Halo\-model branch.
+.SS Plotting the 3PCF multipoles
+.sp
+The output files \fBzetam*.txt\fP contain the multipoles
+\ezeta_m(\etheta_1,\etheta_2)\&. These can be visualized as 2D maps:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+import numpy as np
+import matplotlib.pyplot as plt
+from matplotlib.colors import LogNorm
+
+path = \(dq/home/sadi/LSST/test/wlcf\-main/tests/Bell_outputs\(dq
+prefix = \(dqhalo_model_z05078_\(dq
+
+theta = np.loadtxt(f\(dq{path}/{prefix}theta_array.txt\(dq) * 180 / np.pi * 60
+Theta2, Theta1 = np.meshgrid(theta, theta)
+
+fig = plt.figure(figsize=(19, 4))
+
+gs = fig.add_gridspec(
+    nrows=1,
+    ncols=6,
+    width_ratios=[1, 1, 1, 1, 1, 0.06],
+    wspace=0.25
+)
+
+norm = LogNorm(vmin=1e\-11, vmax=1e\-8)
+
+for m in range(5):
+    ax = fig.add_subplot(gs[0, m])
+
+    zeta = np.abs(np.loadtxt(f\(dq{path}/{prefix}zetam{m}.txt\(dq))
+
+    im = ax.pcolormesh(
+        Theta2,
+        Theta1,
+        zeta,
+        shading=\(dqauto\(dq,
+        cmap=\(dqRdYlBu_r\(dq,
+        norm=norm
+    )
+
+    ax.set_xscale(\(dqlog\(dq)
+    ax.set_yscale(\(dqlog\(dq)
+    ax.set_xlim(10, 200)
+    ax.set_ylim(10, 200)
+    ax.set_aspect(\(dqequal\(dq, adjustable=\(dqbox\(dq)
+    ax.set_title(fr\(dq$m={m}$\(dq, fontsize=14)
+
+    if m == 0:
+        ax.set_ylabel(r\(dq$\etheta_1$ [arcmin]\(dq, fontsize=13)
+
+    ax.set_xlabel(r\(dq$\etheta_2$ [arcmin]\(dq, fontsize=13)
+
+# Colorbar outside the plots
+cax = fig.add_subplot(gs[0, \-1])
+cbar = fig.colorbar(im, cax=cax)
+cbar.set_label(r\(dq$|\ezeta_m|$\(dq, fontsize=13)
+cbar.ax.tick_params(labelsize=11)
+
+fig.suptitle(
+    \(dqHalo Model: 3PCF Multipoles at z = 0.5078\(dq,
+    fontsize=18,
+    y=1.02
+)
+    plt.savefig(\(dqhalo_model_3pcf.png\(dq, dpi=300, bbox_inches=\(dqtight\(dq)
+    plt.show()
+.EE
+.UNINDENT
+.UNINDENT
+[image]
+.sp
+Or we can plot
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+path = \(dq/home/sadi/LSST/test/wlcf\-main/tests/Bell_outputs\(dq
+prefix = \(dqhalo_model_z05078_\(dq
+
+theta = np.loadtxt(f\(dq{path}/{prefix}theta_array.txt\(dq) * 180/np.pi * 60
+
+theta2_targets = [13, 72, 169]
+m_values = [0, 1, 2]
+
+fig, axes = plt.subplots(
+    len(theta2_targets),
+    len(m_values),
+    figsize=(9, 9),
+    sharex=True
+)
+
+for i, theta2_fixed in enumerate(theta2_targets):
+    idx = np.argmin(np.abs(theta \- theta2_fixed))
+    theta2_actual = theta[idx]
+
+    for j, m in enumerate(m_values):
+        ax = axes[i, j]
+
+        zeta = np.abs(np.loadtxt(f\(dq{path}/{prefix}zetam{m}.txt\(dq))
+
+        # theta2 fixed, theta1 varies
+        y = zeta[:, idx]
+
+        ax.plot(theta, y, color=\(dqblack\(dq, marker=\(dqo\(dq, markersize=3, lw=1)
+
+        ax.set_xscale(\(dqlog\(dq)
+        ax.set_yscale(\(dqlog\(dq)
+
+        ax.set_xlim(10, 200)
+
+        if i == 0:
+            ax.set_title(fr\(dq$m={m}$\(dq)
+
+        if j == 0:
+            ax.set_ylabel(
+                fr\(dq$\ezeta_m(\etheta_1,\etheta_2={theta2_actual:.0f}\(aq)$\(dq
+            )
+
+        if i == len(theta2_targets) \- 1:
+            ax.set_xlabel(r\(dq$\etheta_1$ [arcmin]\(dq)
+
+        ax.grid(alpha=0.2)
+
+plt.tight_layout()
+plt.savefig(\(dqhalo_model_slice_3pcf.png\(dq, dpi=300, bbox_inches=\(dqtight\(dq)
+plt.show()
+.EE
+.UNINDENT
+.UNINDENT
+[image]
+.SS Comparing different models
+.sp
+We can run several theoretical models by changing
+\fBtree_level\fP:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+base_params = dict(
+    numberThreads=8,
+    verbose=2,
+    verbose_log=1,
+
+    # T17 / paper cosmology
+    z=0.5078,
+    h=0.7,
+    sigma8=0.82,
+    Omb=0.046,
+    Omc=0.233,
+    Omnu=0.0,
+    ns=0.97,
+    w=\-1.0,
+
+    # Make sure this P(k) was generated with the same cosmology
+    fnamePS=\(dq./input/linear_pk_camb_T17_z05078.txt\(dq,
+
+    # Redshift bin
+    Wg=0,
+    fWgchi=\(dq./input/Wg_Takahashi_z05078.txt\(dq,
+
+    rootDir=\(dqOutput\(dq,
+    path_Bells=\(dqBell_outputs\(dq,
+
+    zbin=0.5078,
+    mMax=5,
+    chiQuadSteps=300,
+    GLpoints=64,
+    Nell=128,
+    ellmax=10000,
+    ellmin=0.001,
+    writevectors=0,
+    chatty=2,
+    options=\(dq\(dq
+)
+
+models = {
+    1: \(dqSPT\(dq,
+    2: \(dqTree\(dq,
+    3: \(dqEFT\(dq,
+    4: \(dqHalo_model\(dq
+}
+
+for tree_level, model_name in models.items():
+
+    print(f\(dqRunning {model_name} model with tree_level={tree_level}\(dq)
+
+    params = base_params.copy()
+    params[\(dqtree_level\(dq] = tree_level
+    params[\(dqprefix\(dq] = f\(dq{model_name.lower()}_z05078_\(dq
+
+    w = wlcf()
+    w.set(params)
+    w.Run()
+
+    print(f\(dqFinished {model_name}\(dq)
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+We plot the different cases
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+plt.rcParams.update({
+    \(dqfont.size\(dq: 14,
+    \(dqaxes.titlesize\(dq: 16,
+    \(dqaxes.labelsize\(dq: 14
+})
+
+path = \(dq/home/sadi/LSST/test/wlcf\-main/tests/Bell_outputs\(dq
+
+models = {
+    \(dqSPT\(dq: \(dqspt_z05078_\(dq,
+    \(dqTree\(dq: \(dqtree_z05078_\(dq,
+    \(dqEFT\(dq: \(dqeft_z05078_\(dq,
+    \(dqHalo Model\(dq: \(dqhalo_model_z05078_\(dq,
+}
+
+m_values = range(5)
+
+theta = np.loadtxt(f\(dq{path}/spt_z05_theta_array.txt\(dq) * 180 / np.pi * 60
+Theta2, Theta1 = np.meshgrid(theta, theta)
+
+nrows = len(models)
+ncols = len(m_values)
+
+fig = plt.figure(figsize=(20, 13))
+
+gs = fig.add_gridspec(
+    nrows=nrows,
+    ncols=ncols + 1,
+    width_ratios=[1, 1, 1, 1, 1, 0.05],
+    wspace=0.2,
+    hspace=0.25
+)
+
+norm = LogNorm(vmin=1e\-11, vmax=1e\-8)
+
+for i, (model_name, prefix) in enumerate(models.items()):
+    for j, m in enumerate(m_values):
+
+        ax = fig.add_subplot(gs[i, j])
+
+        zeta = np.abs(np.loadtxt(f\(dq{path}/{prefix}zetam{m}.txt\(dq))
+
+        im = ax.pcolormesh(
+            Theta2,
+            Theta1,
+            zeta,
+            shading=\(dqauto\(dq,
+            cmap=\(dqRdYlBu_r\(dq,
+            norm=norm
+        )
+
+        ax.set_xscale(\(dqlog\(dq)
+        ax.set_yscale(\(dqlog\(dq)
+        ax.set_xlim(10, 200)
+        ax.set_ylim(10, 200)
+
+        if i == 0:
+            ax.set_title(fr\(dq$m={m}$\(dq)
+
+        if j == 0:
+            ax.set_ylabel(f\(dq{model_name}\en\(dq + r\(dq$\etheta_1$ [arcmin]\(dq)
+
+        if i == nrows \- 1:
+            ax.set_xlabel(r\(dq$\etheta_2$ [arcmin]\(dq)
+
+cax = fig.add_subplot(gs[:, \-1])
+cbar = fig.colorbar(im, cax=cax)
+cbar.set_label(r\(dq$|\ezeta_m|$\(dq, fontsize=16)
+cbar.ax.tick_params(labelsize=12)
+plt.savefig(\(dqmodels_3pcf.png\(dq, dpi=300, bbox_inches=\(dqtight\(dq)
+plt.show()
+.EE
+.UNINDENT
+.UNINDENT
+[image]
+.SH 3-POINT CORRELATION FUNCTIONS
+.sp
+\fBwlcf\fP computes \fBthree\-point correlation functions (3PCF)\fP for scalar fields, such as the weak lensing convergence \ekappa\&. These higher\-order statistics provide access to non\-Gaussian information in the large\-scale structure of the Universe.
+.sp
+In particular, the code evaluates the correlation:
+.sp
+.ce
+\elangle \ekappa(\ehat{n}_1),\ekappa(\ehat{n}_2),\ekappa(\ehat{n}_3) \erangle
+.ce 0
+.sp
+using a plane\-wave expansion and a harmonic decomposition.
+.sp
+\fBHarmonic base\fP
+.sp
+The angular dependence of the 3PCF is expressed in a \fBharmonic basis\fP, where the signal is decomposed into multipoles. This allows for an efficient and structured representation of the correlation function.
+.sp
+The expansion is performed in terms of angular modes labeled by an index m, leading to a set of coefficients:
+.sp
+.ce
+\ezeta_m(\etheta_1, \etheta_2)
+.ce 0
+.sp
+where:
+.INDENT 0.0
+.IP \(bu 2
+\etheta_1, \etheta_2 are angular separations
+.IP \(bu 2
+m = 0, 1, \edots, m_{\emathrm{max}} is the multipole index
+.UNINDENT
+.sp
+\fBOutput\fP
+.sp
+The results of the harmonic decomposition are stored in files:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+zetam0.txt
+zetam1.txt
+\&...
+zetamN.txt
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+along with the corresponding angular grid:
+.INDENT 0.0
+.INDENT 3.5
+.sp
+.EX
+theta_array.txt
+.EE
+.UNINDENT
+.UNINDENT
+.sp
+These outputs can be used to reconstruct or visualize the full three\-point correlation function.
+.INDENT 0.0
+.IP \(bu 2
+\fI\%Index\fP
+.IP \(bu 2
+\fI\%Module Index\fP
+.IP \(bu 2
+\fI\%Search Page\fP
+.UNINDENT
+.SH AUTHOR
+Alejandro Avilés
+.SH COPYRIGHT
+2024, Alejandro Avilés
+.\" Generated by docutils manpage writer.
+.

@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Parameters &mdash; cTreeBalls 1.0.0 documentation</title>
+  <title>Parameters &mdash; WLCF 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
@@ -20,7 +20,7 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
     <link rel="next" title="Linear power spectrum files" href="ps_files.html" />
-    <link rel="prev" title="Installation" href="installation.html" /> 
+    <link rel="prev" title="WLCF Installation" href="installation.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -32,7 +32,7 @@
           
           
           <a href="index.html" class="icon icon-home">
-            cTreeBalls
+            WLCF
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -45,12 +45,13 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">WLCF Installation</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Parameters</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#parameters-related-to-the-searching-method">Parameters related to the searching method</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#parameters-to-control-the-i-o-file-s">Parameters to control the I/O file(s)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#parameters-to-control-histograms-and-their-output-files">Parameters to control histograms and their output files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#set-of-parameters-needed-to-construct-a-test-model">Set of parameters needed to construct a test model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parameters-related-to-the-cosmological-model">Parameters related to the cosmological model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parameters-to-control-the-input-power-spectrum">Parameters to control the input power spectrum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parameters-related-to-the-weak-lensing-kernel">Parameters related to the weak lensing kernel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parameters-controlling-the-model-and-numerical-setup">Parameters controlling the model and numerical setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#parameters-to-control-output-files">Parameters to control output files</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#miscellaneous-parameters">Miscellaneous parameters</a></li>
 </ul>
 </li>
@@ -59,7 +60,6 @@
 <li class="toctree-l1"><a class="reference internal" href="addons.html">AddOn’s</a></li>
 <li class="toctree-l1"><a class="reference internal" href="python.html">Python interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="handson.html">Hands on</a></li>
-<li class="toctree-l1"><a class="reference internal" href="2pcf.html">2-point correlation functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3pcf.html">3-point correlation functions</a></li>
 </ul>
 
@@ -69,7 +69,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">cTreeBalls</a>
+          <a href="index.html">WLCF</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -89,134 +89,170 @@
              
   <section id="parameters">
 <h1>Parameters<a class="headerlink" href="#parameters" title="Link to this heading"></a></h1>
-<p>This section describes the various parameters cBalls needs for controlling
-what the searching process do:</p>
-<section id="parameters-related-to-the-searching-method">
-<h2>Parameters related to the searching method<a class="headerlink" href="#parameters-related-to-the-searching-method" title="Link to this heading"></a></h2>
-<dl class="field-list">
-<dt class="field-odd">searchMethod<span class="colon">:</span></dt>
-<dd class="field-odd"><p>(str or list) [alias: search]
-The searching method to use. Default is <code class="docutils literal notranslate"><span class="pre">tree-omp-sincos</span></code>. Fastest method so far is <code class="docutils literal notranslate"><span class="pre">balls-omp</span></code>.</p>
-<p>Use it as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">searchMethod</span> <span class="o">=</span> <span class="n">balls</span><span class="o">-</span><span class="n">omp</span>
-</pre></div>
-</div>
-<p>In command line version do not use spaces before and after <code class="docutils literal notranslate"><span class="pre">=</span></code> or it won’t be parsed correctly. In a parameter file you have more liberty.</p>
+<p>This section describes the various parameters <strong>wlcf</strong> needs for controlling
+the computation of the three-point correlation function (3PCF) for weak lensing convergence.</p>
+<section id="parameters-related-to-the-cosmological-model">
+<h2>Parameters related to the cosmological model<a class="headerlink" href="#parameters-related-to-the-cosmological-model" title="Link to this heading"></a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">z<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(float) Redshift at which the correlation functions are evaluated.</p>
 </dd>
-<dt class="field-even">mChebyshev<span class="colon">:</span></dt>
-<dd class="field-even"><p>(positive int) [alias: mcheb]
-The number of multipoles to compute for a 3pcf computation. Number of them are: <code class="docutils literal notranslate"><span class="pre">mChebyshev</span> <span class="pre">+</span> <span class="pre">1</span></code>, because it includes the monopole.</p>
-<p>Use it as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mChebyshev</span> <span class="o">=</span> <span class="mi">7</span>
-</pre></div>
-</div>
-<p>Default value is <code class="docutils literal notranslate"><span class="pre">7</span></code>. As multipoles comes from a harmonic expansion, we may be interested in computing the whole 3pcf. This process involves a FFT, therefore give <code class="docutils literal notranslate"><span class="pre">mChebyshev</span> <span class="pre">+</span> <span class="pre">1</span></code> as a power of 2.</p>
+<dt class="field-even">h<span class="colon">:</span></dt>
+<dd class="field-even"><p>(float) Dimensionless Hubble parameter.</p>
+</dd>
+<dt class="field-odd">sigma8<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(float) Normalization of the matter power spectrum.</p>
+</dd>
+<dt class="field-even">Omb<span class="colon">:</span></dt>
+<dd class="field-even"><p>(float) Baryon density parameter.</p>
+</dd>
+<dt class="field-odd">Omc<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(float) Cold dark matter density parameter.</p>
+</dd>
+<dt class="field-even">Omnu<span class="colon">:</span></dt>
+<dd class="field-even"><p>(float, default=0.0) Massive neutrino density parameter.</p>
+</dd>
+<dt class="field-odd">ns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(float) Spectral index of the primordial power spectrum.</p>
+</dd>
+<dt class="field-even">w<span class="colon">:</span></dt>
+<dd class="field-even"><p>(float, default=-1.0) Dark energy equation of state parameter.</p>
 </dd>
 </dl>
 </section>
-<section id="parameters-to-control-the-i-o-file-s">
-<h2>Parameters to control the I/O file(s)<a class="headerlink" href="#parameters-to-control-the-i-o-file-s" title="Link to this heading"></a></h2>
-<dl class="field-list">
-<dt class="field-odd">infile<span class="colon">:</span></dt>
-<dd class="field-odd"><p>(str, default=””) [alias: in] File names with points to analyse.</p>
+<section id="parameters-to-control-the-input-power-spectrum">
+<h2>Parameters to control the input power spectrum<a class="headerlink" href="#parameters-to-control-the-input-power-spectrum" title="Link to this heading"></a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">fnamePS<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(str) [alias: ps] File containing the linear matter power spectrum ( P(k) ).</p>
 </dd>
-<dt class="field-even">infileformat<span class="colon">:</span></dt>
-<dd class="field-even"><p>(str, default=columns-ascii) [alias: infmt] Data input files format (columns-ascii, binary or takahasi)</p>
-<p>The input columns for <code class="docutils literal notranslate"><span class="pre">columns-ascii</span></code> format:</p>
+</dl>
+<p>Use it as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fnamePS</span><span class="o">=./</span><span class="nb">input</span><span class="o">/</span><span class="n">linear_pk</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+</section>
+<section id="parameters-related-to-the-weak-lensing-kernel">
+<h2>Parameters related to the weak lensing kernel<a class="headerlink" href="#parameters-related-to-the-weak-lensing-kernel" title="Link to this heading"></a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">Wg<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(int, default=0) Controls how the lensing kernel is defined.</p>
+</dd>
+</dl>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">x</span></code> = x position of a point in the catalog.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">y</span></code> = y position of a point in the catalog.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">z</span></code> = z position of a point in the catalog.</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">kappa</span></code> = The kappa value of the point.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">0</span></code> = Dirac delta at the redshift bin</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">1</span></code> = Read kernel from file</p></li>
 </ul>
+<dl class="field-list simple">
+<dt class="field-odd">fWgchi<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(str) [alias: fwgchi] File containing the weak lensing kernel ( W_g(chi) ).</p>
+</dd>
+</dl>
+<p>Use it as:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">fWgchi</span><span class="o">=./</span><span class="nb">input</span><span class="o">/</span><span class="n">Wg_Takahashi_z05078</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+</section>
+<section id="parameters-controlling-the-model-and-numerical-setup">
+<h2>Parameters controlling the model and numerical setup<a class="headerlink" href="#parameters-controlling-the-model-and-numerical-setup" title="Link to this heading"></a></h2>
+<dl class="field-list simple">
+<dt class="field-odd">tree_level<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(int, default=3) [alias: tlev] Model used for the bispectrum calculation.</p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">1</span></code> = Standard Perturbation Theory (SPT)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">2</span></code> = Tree-level approximation</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">3</span></code> = Effective Field Theory (EFT)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">4</span></code> = Halo Model (HM)</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">zbin<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(float) Redshift bin used in the projection.</p>
+</dd>
+<dt class="field-even">mMax<span class="colon">:</span></dt>
+<dd class="field-even"><p>(int) Maximum multipole order for the expansion.</p>
+</dd>
+<dt class="field-odd">chiQuadSteps<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(int) [alias: chiqst] Number of integration steps over comoving distance.</p>
+</dd>
+<dt class="field-even">GLpoints<span class="colon">:</span></dt>
+<dd class="field-even"><p>(int) [alias: gl] Number of Gauss–Legendre points.</p>
+</dd>
+<dt class="field-odd">Nell<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(int) Number of angular multipoles.</p>
+</dd>
+<dt class="field-even">ellmin<span class="colon">:</span></dt>
+<dd class="field-even"><p>(float) Minimum multipole value.</p>
+</dd>
+<dt class="field-odd">ellmax<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(float) Maximum multipole value.</p>
 </dd>
 </dl>
 </section>
-<section id="parameters-to-control-histograms-and-their-output-files">
-<h2>Parameters to control histograms and their output files<a class="headerlink" href="#parameters-to-control-histograms-and-their-output-files" title="Link to this heading"></a></h2>
+<section id="parameters-to-control-output-files">
+<h2>Parameters to control output files<a class="headerlink" href="#parameters-to-control-output-files" title="Link to this heading"></a></h2>
 <dl class="field-list simple">
-<dt class="field-odd">useLogHist<span class="colon">:</span></dt>
-<dd class="field-odd"><p>(bool, default=true) Which type of binning should be used.</p>
+<dt class="field-odd">rootDir<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(str, default=”Output”) [alias: root] Directory where output files will be written.</p>
 </dd>
-<dt class="field-even">logHistBinsPD<span class="colon">:</span></dt>
-<dd class="field-even"><p>(float) The minimum separation to include in the histograms.</p>
+<dt class="field-even">prefix<span class="colon">:</span></dt>
+<dd class="field-even"><p>(str, default=”<a href="#id1"><span class="problematic" id="id2">run1_</span></a>”) [alias: pre] Prefix for output file names.</p>
 </dd>
-<dt class="field-odd">rangeN<span class="colon">:</span></dt>
-<dd class="field-odd"><p>(float) The maximum separation to include in the histograms.</p>
+<dt class="field-odd">path_Bells<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(str, default=”Bell_outputs”) [alias: bellout] Directory where angular correlation functions are stored.</p>
 </dd>
-<dt class="field-even">rminHist<span class="colon">:</span></dt>
-<dd class="field-even"><p>(float) The minimum separation to include in the histograms.</p>
-</dd>
-<dt class="field-odd">sizeHistN<span class="colon">:</span></dt>
-<dd class="field-odd"><p>(int) The number of output bins to use.</p>
-</dd>
-</dl>
-</section>
-<section id="set-of-parameters-needed-to-construct-a-test-model">
-<h2>Set of parameters needed to construct a test model<a class="headerlink" href="#set-of-parameters-needed-to-construct-a-test-model" title="Link to this heading"></a></h2>
-<dl class="field-list simple">
-<dt class="field-odd">seed<span class="colon">:</span></dt>
-<dd class="field-odd"><p>(int, default=123) Random number seed to test run or useful to change a random region in Takahasi simulations.</p>
-</dd>
-<dt class="field-even">testmodel<span class="colon">:</span></dt>
-<dd class="field-even"><p>(str, default=simple-cubic-random) [alias: tstmodel] Test model name to analyse.</p>
-</dd>
-<dt class="field-odd">nbody<span class="colon">:</span></dt>
-<dd class="field-odd"><p>(int, default=16348) Number of points to test.</p>
-</dd>
-<dt class="field-even">lengthBox<span class="colon">:</span></dt>
-<dd class="field-even"><p>(float, default=10000) [alias: lbox] Length of the box to test.</p>
+<dt class="field-even">writevectors<span class="colon">:</span></dt>
+<dd class="field-even"><p>(bool, default=true) Whether to write intermediate vectors.</p>
 </dd>
 </dl>
 </section>
 <section id="miscellaneous-parameters">
 <h2>Miscellaneous parameters<a class="headerlink" href="#miscellaneous-parameters" title="Link to this heading"></a></h2>
-<dl class="field-list">
-<dt class="field-odd">script<span class="colon">:</span></dt>
-<dd class="field-odd"><p>(str, default=””) Scripts in shell or python that can be run in pre-processing or post-processing.</p>
-</dd>
-<dt class="field-even">stepState<span class="colon">:</span></dt>
-<dd class="field-even"><p>(int, default=10000) number of steps to save a state-run info (pivot number completed in the log file).</p>
-</dd>
+<dl class="field-list simple">
 <dt class="field-odd">verbose<span class="colon">:</span></dt>
-<dd class="field-odd"><p>(int, default=1) [alias: verb] How verbose the code should be during processing.</p>
-<ul class="simple">
-<li><p>0 = no output unless there is an error</p></li>
-<li><p>1 = output warnings</p></li>
-<li><p>2 = output progress information</p></li>
-<li><p>3 = output extra debugging lines</p></li>
-</ul>
-</dd>
-<dt class="field-even">verbose_log<span class="colon">:</span></dt>
-<dd class="field-even"><p>(int, default=1) [alias: verblog] To print messages to a log file <code class="docutils literal notranslate"><span class="pre">cballs.log</span></code> in directory <code class="docutils literal notranslate"><span class="pre">tmp</span></code> under output directory given by the parameter: <a href="#id1"><span class="problematic" id="id2">``</span></a>rootDir`.</p>
-<p>Amount of message information is controlled by the int given.</p>
-</dd>
-<dt class="field-odd">numberThreads<span class="colon">:</span></dt>
-<dd class="field-odd"><p>(int, default=4) [alias: nthreads] How many OpenMP threads should be used.</p>
-<p>It is needed to switch on OpenMP: <code class="docutils literal notranslate"><span class="pre">OPENMPMACHINE</span> <span class="pre">=</span> <span class="pre">1</span></code> in <code class="docutils literal notranslate"><span class="pre">Makefile_settings</span></code> and recompile cBalls again.</p>
-</dd>
-<dt class="field-even">options<span class="colon">:</span></dt>
-<dd class="field-even"><p>(str, default=””) [alias: opt] You may give here various code behavior options.</p>
-<p>Use it as:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">options</span> <span class="o">=</span> <span class="n">str1</span><span class="p">,</span><span class="n">str2</span><span class="p">,</span><span class="n">str3</span><span class="p">,</span><span class="o">...</span>
-</pre></div>
-</div>
-<p>where str# is one of the:</p>
-<ul class="simple">
-<li><p>stop = stop execution before searching process</p></li>
-<li><p>compute-HistN = compute NN encounters and save histogram in a file</p></li>
-<li><p>and-CF = if you use <code class="docutils literal notranslate"><span class="pre">compute-HistN</span></code> then you may compute and save the correlation funcion of NN encounters (the equivalent to the radial distribution function in liquids).</p></li>
-<li><p>no-one-ball = during the searching process does not use balls criterion to speed up the code</p></li>
-</ul>
+<dd class="field-odd"><p>(int, default=2) [alias: verb] Controls the amount of information printed to the terminal.</p>
 </dd>
 </dl>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
 <ul class="simple">
-<li><p>It is not necessary to specify all the parameters. You need to give only the ones apropriate to the run. The rest of parameters will use their default values if they are OK with you.</p></li>
-<li><p>When you specify the root output directory using: <code class="docutils literal notranslate"><span class="pre">rootDir</span></code>, and this is a single directory that will be located in the pwd dir, then do not use <code class="docutils literal notranslate"><span class="pre">./</span></code> at the begining of the name or <code class="docutils literal notranslate"><span class="pre">/</span></code> at its end.</p></li>
+<li><p>0 = no output unless there is an error</p></li>
+<li><p>1 = warnings</p></li>
+<li><p>2 = progress information</p></li>
+<li><p>3 = debugging output</p></li>
 </ul>
+<dl class="field-list simple">
+<dt class="field-odd">verbose_log<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(int, default=1) [alias: verblog] Controls logging to file inside <cite>Output/tmp</cite>.</p>
+</dd>
+<dt class="field-even">chatty<span class="colon">:</span></dt>
+<dd class="field-even"><p>(int, default=2) Additional verbosity level for internal messages.</p>
+</dd>
+<dt class="field-odd">numberThreads<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(int, default=4) [alias: nthreads] Number of OpenMP threads used during execution.</p>
+</dd>
+</dl>
+<p>It is required to enable OpenMP by setting:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">OPENMPMACHINE</span> <span class="o">=</span> <span class="mi">1</span>
+</pre></div>
 </div>
+<p>in <code class="docutils literal notranslate"><span class="pre">Makefile_settings</span></code> and recompiling the code.</p>
+<dl class="field-list simple">
+<dt class="field-odd">options<span class="colon">:</span></dt>
+<dd class="field-odd"><p>(str, default=””) [alias: opt] Additional options controlling code behavior.</p>
+</dd>
+</dl>
+<ul>
+<li><p>It is not necessary to specify all parameters. Only the relevant ones need to be provided. The rest will take default values.</p></li>
+<li><p>A parameter file is automatically generated after each run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">Output</span><span class="o">/</span><span class="n">parameters_null</span><span class="o">-</span><span class="n">cballs</span><span class="o">-</span><span class="n">usedvalues</span>
+</pre></div>
+</div>
+</li>
+</ul>
+<p>This file can be used as a template for custom configurations.</p>
+<ul class="simple">
+<li><p>When specifying <cite>rootDir</cite>, avoid using <cite>./</cite> at the beginning or <cite>/</cite> at the end if it is a local directory.</p></li>
+</ul>
 </section>
 </section>
 
@@ -224,14 +260,14 @@ The number of multipoles to compute for a 3pcf computation. Number of them are: 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="installation.html" class="btn btn-neutral float-left" title="Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="installation.html" class="btn btn-neutral float-left" title="WLCF Installation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
         <a href="ps_files.html" class="btn btn-neutral float-right" title="Linear power spectrum files" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Mario A. Rodriguez-Meza.</p>
+    <p>&#169; Copyright 2024, Alejandro Avilés.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

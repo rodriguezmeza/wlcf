@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Installation &mdash; cTreeBalls 1.0.0 documentation</title>
+  <title>WLCF Installation &mdash; WLCF 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
@@ -32,7 +32,7 @@
           
           
           <a href="index.html" class="icon icon-home">
-            cTreeBalls
+            WLCF
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -45,10 +45,9 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#makefile">Makefile</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#makefile-settings">Makefile settings</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#makefile-plataform-machine">Makefile plataform machine</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">WLCF Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#compilation">Compilation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="params.html">Parameters</a></li>
@@ -57,7 +56,6 @@
 <li class="toctree-l1"><a class="reference internal" href="addons.html">AddOn’s</a></li>
 <li class="toctree-l1"><a class="reference internal" href="python.html">Python interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="handson.html">Hands on</a></li>
-<li class="toctree-l1"><a class="reference internal" href="2pcf.html">2-point correlation functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3pcf.html">3-point correlation functions</a></li>
 </ul>
 
@@ -67,7 +65,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">cTreeBalls</a>
+          <a href="index.html">WLCF</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -75,7 +73,7 @@
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
       <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
-      <li class="breadcrumb-item active">Installation</li>
+      <li class="breadcrumb-item active">WLCF Installation</li>
       <li class="wy-breadcrumbs-aside">
             <a href="_sources/installation.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -85,17 +83,105 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
              
-  <section id="installation">
-<h1>Installation<a class="headerlink" href="#installation" title="Link to this heading"></a></h1>
-<p>This section describes the installation settings of cBalls:</p>
-<section id="makefile">
-<h2>Makefile<a class="headerlink" href="#makefile" title="Link to this heading"></a></h2>
+  <section id="wlcf-installation">
+<h1>WLCF Installation<a class="headerlink" href="#wlcf-installation" title="Link to this heading"></a></h1>
+<p>The wlcf code is a C-based implementation for computing higher-order correlation functions in cosmology, with optional support for parallel execution via OpenMP and a Python interface for flexible workflows.
+This section guides you through installing the code, compiling it, and running a first test example.</p>
+<section id="requirements">
+<h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading"></a></h2>
+<p>TThe code requires:</p>
+<ul class="simple">
+<li><p>A C compiler (recommended: <cite>gcc &gt;= 10</cite>)</p></li>
+<li><p>Optional libraries:</p>
+<ul>
+<li><p><strong>GSL</strong> (GNU Scientific Library)</p></li>
+<li><p><strong>FFTW3</strong></p></li>
+</ul>
+</li>
+<li><p>Python (optional, for the wrapper interface):</p>
+<ul>
+<li><p><cite>numpy</cite></p></li>
+<li><p><cite>cython</cite></p></li>
+</ul>
+</li>
+</ul>
 </section>
-<section id="makefile-settings">
-<h2>Makefile settings<a class="headerlink" href="#makefile-settings" title="Link to this heading"></a></h2>
-</section>
-<section id="makefile-plataform-machine">
-<h2>Makefile plataform machine<a class="headerlink" href="#makefile-plataform-machine" title="Link to this heading"></a></h2>
+<section id="compilation">
+<h2>Compilation<a class="headerlink" href="#compilation" title="Link to this heading"></a></h2>
+<p>Clone the repository:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git<span class="w"> </span>clone<span class="w"> </span>https://github.com/your-repo/wlcf.git
+<span class="nb">cd</span><span class="w"> </span>wlcf
+</pre></div>
+</div>
+<p>Edit the file <code class="docutils literal notranslate"><span class="pre">Makefile_machine</span></code> if needed to specify library paths (GSL, FFTW).</p>
+<p>Compile the code:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>clean
+make
+</pre></div>
+</div>
+<p>If GSL is not available, it can be disabled in <cite>Makefile_settings</cite> by setting:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nv">USEGSL</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="m">0</span>
+</pre></div>
+</div>
+<p>If compilation is successful, the executable <code class="docutils literal notranslate"><span class="pre">wlcf</span></code> will be created in the main directory.</p>
+<p>To verify the installation:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span><span class="w"> </span>tests
+./wlcf
+</pre></div>
+</div>
+<p>This runs the code using default parameters.</p>
+<p>After execution, the following will be generated:</p>
+<ul class="simple">
+<li><p><cite>Output/</cite> directory</p></li>
+<li><p>Correlation function files:</p>
+<ul>
+<li><p><cite>zetam*</cite></p></li>
+<li><p><cite>Bmells*</cite></p></li>
+<li><p><cite>Bnk*</cite></p></li>
+</ul>
+</li>
+<li><p>Log files (inside <cite>Output/tmp</cite>)</p></li>
+<li><p>Parameter file: <cite>parameters_null-cballs-usedvalues*</cite></p></li>
+</ul>
+<p>This parameter file can be used as a template for custom runs.</p>
+<p><strong>Python wrapper</strong></p>
+<p>The code includes a Python interface for easier control and integration.</p>
+<p>Build the wrapper</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>make<span class="w"> </span>all
+</pre></div>
+</div>
+<p>Install dependencies if needed:</p>
+<p>You can use the wrapper as</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">wlcfpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">wlcf</span>
+
+<span class="n">w</span> <span class="o">=</span> <span class="n">wlcf</span><span class="p">()</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">numberThreads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">w</span><span class="o">.</span><span class="n">Run</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Parallel execution (OpenMP)</strong></p>
+<p>The code supports shared-memory parallelism using OpenMP.</p>
+<p>To control the number of threads:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">8</span>
+</pre></div>
+</div>
+<p>The code may also set the number of threads internally using the parameter <cite>numberThreads</cite>.</p>
+<p><strong>HPC example (Perlmutter)</strong></p>
+<p>On <strong>NERSC Perlmutter</strong>, a typical workflow in an interactive node is:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>module<span class="w"> </span>load<span class="w"> </span>gcc
+salloc<span class="w"> </span>-N<span class="w"> </span><span class="m">1</span><span class="w"> </span>-C<span class="w"> </span>cpu<span class="w"> </span>-q<span class="w"> </span>interactive<span class="w"> </span>-t<span class="w"> </span><span class="m">01</span>:00:00
+<span class="nb">export</span><span class="w"> </span><span class="nv">OMP_NUM_THREADS</span><span class="o">=</span><span class="m">32</span>
+<span class="nb">cd</span><span class="w"> </span>wlcf/tests
+../wlcf
+</pre></div>
+</div>
+<p><strong>Notes</strong></p>
+<ul class="simple">
+<li><p>If compilation fails, verify library paths in <cite>Makefile_machine</cite></p></li>
+<li><p>OpenMP requires a compatible compiler (e.g., <cite>gcc</cite> with <cite>-fopenmp</cite>)</p></li>
+<li><p>Performance may saturate at high thread counts depending on the workload</p></li>
+<li><p>For large runs, always use compute nodes rather than login nodes</p></li>
+</ul>
 </section>
 </section>
 
@@ -110,7 +196,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Mario A. Rodriguez-Meza.</p>
+    <p>&#169; Copyright 2024, Alejandro Avilés.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

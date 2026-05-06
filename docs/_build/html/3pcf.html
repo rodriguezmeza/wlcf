@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>3-point correlation functions &mdash; cTreeBalls 1.0.0 documentation</title>
+  <title>3-point correlation functions &mdash; WLCF 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
@@ -20,7 +20,7 @@
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="2-point correlation functions" href="2pcf.html" /> 
+    <link rel="prev" title="Hands on" href="handson.html" /> 
 </head>
 
 <body class="wy-body-for-nav"> 
@@ -32,7 +32,7 @@
           
           
           <a href="index.html" class="icon icon-home">
-            cTreeBalls
+            WLCF
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -45,18 +45,14 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">WLCF Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="params.html">Parameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ps_files.html">Linear power spectrum files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pre_post_process.html">Pre/Post processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="addons.html">AddOn’s</a></li>
 <li class="toctree-l1"><a class="reference internal" href="python.html">Python interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="handson.html">Hands on</a></li>
-<li class="toctree-l1"><a class="reference internal" href="2pcf.html">2-point correlation functions</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">3-point correlation functions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#harmonic-base">Harmonic base</a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">3-point correlation functions</a></li>
 </ul>
 
         </div>
@@ -65,7 +61,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">cTreeBalls</a>
+          <a href="index.html">WLCF</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -85,23 +81,47 @@
              
   <section id="point-correlation-functions">
 <h1>3-point correlation functions<a class="headerlink" href="#point-correlation-functions" title="Link to this heading"></a></h1>
-<p><strong>cBalls</strong> can also compute 3-point correlations (3pcf) when counts (N) or a scalar field are involved (like convergence <span class="math notranslate nohighlight">\(\kappa\)</span>). In particular to compute the correlation KKK the numerical code use the harmonic base.</p>
-<section id="harmonic-base">
-<h2>Harmonic base<a class="headerlink" href="#harmonic-base" title="Link to this heading"></a></h2>
-</section>
+<p><strong>wlcf</strong> computes <strong>three-point correlation functions (3PCF)</strong> for scalar fields, such as the weak lensing convergence <span class="math notranslate nohighlight">\(\kappa\)</span>. These higher-order statistics provide access to non-Gaussian information in the large-scale structure of the Universe.</p>
+<p>In particular, the code evaluates the correlation:</p>
+<div class="math notranslate nohighlight">
+\[\langle \kappa(\hat{n}_1),\kappa(\hat{n}_2),\kappa(\hat{n}_3) \rangle\]</div>
+<p>using a plane-wave expansion and a harmonic decomposition.</p>
+<p><strong>Harmonic base</strong></p>
+<p>The angular dependence of the 3PCF is expressed in a <strong>harmonic basis</strong>, where the signal is decomposed into multipoles. This allows for an efficient and structured representation of the correlation function.</p>
+<p>The expansion is performed in terms of angular modes labeled by an index <span class="math notranslate nohighlight">\(m\)</span>, leading to a set of coefficients:</p>
+<div class="math notranslate nohighlight">
+\[\zeta_m(\theta_1, \theta_2)\]</div>
+<p>where:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\theta_1\)</span>, <span class="math notranslate nohighlight">\(\theta_2\)</span> are angular separations</p></li>
+<li><p><span class="math notranslate nohighlight">\(m = 0, 1, \dots, m_{\mathrm{max}}\)</span> is the multipole index</p></li>
+</ul>
+<p><strong>Output</strong></p>
+<p>The results of the harmonic decomposition are stored in files:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">zetam0</span><span class="o">.</span><span class="n">txt</span>
+<span class="n">zetam1</span><span class="o">.</span><span class="n">txt</span>
+<span class="o">...</span>
+<span class="n">zetamN</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<p>along with the corresponding angular grid:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">theta_array</span><span class="o">.</span><span class="n">txt</span>
+</pre></div>
+</div>
+<p>These outputs can be used to reconstruct or visualize the full three-point correlation function.</p>
 </section>
 
 
            </div>
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
-        <a href="2pcf.html" class="btn btn-neutral float-left" title="2-point correlation functions" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="handson.html" class="btn btn-neutral float-left" title="Hands on" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Mario A. Rodriguez-Meza.</p>
+    <p>&#169; Copyright 2024, Alejandro Avilés.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

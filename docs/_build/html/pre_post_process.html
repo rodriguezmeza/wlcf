@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pre/Post processing &mdash; cTreeBalls 1.0.0 documentation</title>
+  <title>Pre/Post processing &mdash; WLCF 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
@@ -32,7 +32,7 @@
           
           
           <a href="index.html" class="icon icon-home">
-            cTreeBalls
+            WLCF
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -45,18 +45,17 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">WLCF Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="params.html">Parameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ps_files.html">Linear power spectrum files</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Pre/Post processing</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#pre-processing">Pre-processing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#post-processing">Post-processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pre-processing"><strong>Pre-processing</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#post-processing"><strong>Post-processing</strong></a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="addons.html">AddOn’s</a></li>
 <li class="toctree-l1"><a class="reference internal" href="python.html">Python interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="handson.html">Hands on</a></li>
-<li class="toctree-l1"><a class="reference internal" href="2pcf.html">2-point correlation functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3pcf.html">3-point correlation functions</a></li>
 </ul>
 
@@ -66,7 +65,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">cTreeBalls</a>
+          <a href="index.html">WLCF</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -87,12 +86,41 @@
   <section id="pre-post-processing">
 <h1>Pre/Post processing<a class="headerlink" href="#pre-post-processing" title="Link to this heading"></a></h1>
 <p>This section describes the various pre/pos processing for controlling
-what the <cite>cballs</cite> before/after main processing:</p>
+what the <cite>wlcf</cite> before/after main processing:</p>
 <section id="pre-processing">
-<h2>Pre-processing<a class="headerlink" href="#pre-processing" title="Link to this heading"></a></h2>
+<h2><strong>Pre-processing</strong><a class="headerlink" href="#pre-processing" title="Link to this heading"></a></h2>
+<p>Pre-processing involves preparing all required inputs before running <strong>wlcf</strong>.</p>
+<p>Typical tasks include:</p>
+<ul class="simple">
+<li><p>Generating the <strong>linear power spectrum</strong> ( P(k) ) using external tools (e.g., CAMB or CLASS)</p></li>
+<li><p>Preparing the <strong>weak lensing kernel</strong> file (if <cite>Wg=1</cite>)</p></li>
+<li><p>Setting cosmological parameters consistently with the input data</p></li>
+<li><p>Organizing input files into accessible directories</p></li>
+</ul>
+<p>The accuracy of the final correlation functions strongly depends on the quality and consistency of the input power spectrum and cosmological parameters.</p>
 </section>
 <section id="post-processing">
-<h2>Post-processing<a class="headerlink" href="#post-processing" title="Link to this heading"></a></h2>
+<h2><strong>Post-processing</strong><a class="headerlink" href="#post-processing" title="Link to this heading"></a></h2>
+<p>Post-processing refers to analyzing and visualizing the outputs produced by <strong>wlcf</strong>.</p>
+<p>Typical tasks include:</p>
+<ul class="simple">
+<li><p>Reading output files such as:</p>
+<ul>
+<li><p><cite>zetam*</cite> (angular correlation functions)</p></li>
+<li><p><cite>Bmells*</cite> (projected bispectrum)</p></li>
+<li><p><cite>Bnk*</cite> (bispectrum in Fourier space)</p></li>
+</ul>
+</li>
+<li><p>Plotting results (e.g., multipoles, angular correlations)</p></li>
+<li><p>Comparing results across different cosmologies</p></li>
+<li><p>Converting outputs into formats suitable for further analysis</p></li>
+</ul>
+<p><strong>Notes</strong></p>
+<ul class="simple">
+<li><p>Pre-processing is external to <strong>wlcf</strong>; the code assumes inputs are already prepared.</p></li>
+<li><p>Post-processing is flexible and depends on the scientific goals.</p></li>
+<li><p>For large parameter scans, combining the Python interface with HPC resources is recommended.</p></li>
+</ul>
 </section>
 </section>
 
@@ -107,7 +135,7 @@ what the <cite>cballs</cite> before/after main processing:</p>
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Mario A. Rodriguez-Meza.</p>
+    <p>&#169; Copyright 2024, Alejandro Avilés.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

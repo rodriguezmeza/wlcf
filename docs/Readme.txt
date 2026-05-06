@@ -14,9 +14,9 @@ https://www.youtube.com/watch?v=nZttMg_n_s0
 https://docs.readthedocs.io/en/stable/intro/getting-started-with-sphinx.html
 https://sphinx-themes.org/
 
-To create a html version of man page do from cTreeBalls directory:
+To create a html version of man page do from wlcf directory:
 
-man doc/cballs.m | man2html -topm 0 -botm 0 -cgiurl \$title.html doc/cballs.m > doc/cballs.html
+man doc/wlcf.m | man2html -topm 0 -botm 0 -cgiurl \$title.html doc/wlcf.m > doc/wlcf.html
 
 If we follow tutorial en youtube:
 

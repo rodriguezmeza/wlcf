@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Hands on &mdash; cTreeBalls 1.0.0 documentation</title>
+  <title>Hands on &mdash; WLCF 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
@@ -16,10 +16,11 @@
       <script src="_static/documentation_options.js?v=8d563738"></script>
       <script src="_static/doctools.js?v=9bcbadda"></script>
       <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script async="async" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script src="_static/js/theme.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="2-point correlation functions" href="2pcf.html" />
+    <link rel="next" title="3-point correlation functions" href="3pcf.html" />
     <link rel="prev" title="Python interface" href="python.html" /> 
 </head>
 
@@ -32,7 +33,7 @@
           
           
           <a href="index.html" class="icon icon-home">
-            cTreeBalls
+            WLCF
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -45,14 +46,20 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">WLCF Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="params.html">Parameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ps_files.html">Linear power spectrum files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pre_post_process.html">Pre/Post processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="addons.html">AddOn’s</a></li>
 <li class="toctree-l1"><a class="reference internal" href="python.html">Python interface</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Hands on</a></li>
-<li class="toctree-l1"><a class="reference internal" href="2pcf.html">2-point correlation functions</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Hands on</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#setting-up-the-working-directory">Setting up the working directory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generating-the-linear-power-spectrum">Generating the linear power spectrum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#running-wlcf-from-python">Running wlcf from Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#plotting-the-3pcf-multipoles">Plotting the 3PCF multipoles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#comparing-different-models">Comparing different models</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="3pcf.html">3-point correlation functions</a></li>
 </ul>
 
@@ -62,7 +69,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">cTreeBalls</a>
+          <a href="index.html">WLCF</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -82,12 +89,433 @@
              
   <section id="hands-on">
 <h1>Hands on<a class="headerlink" href="#hands-on" title="Link to this heading"></a></h1>
-<p>This section describes a practical guide to use <strong>cBalls</strong>:</p>
-<p>Let us test one of the <a class="reference external" href="https://arxiv.org/pdf/1706.01472">Takahasi</a> realizations. We download the realization using unix <code class="docutils literal notranslate"><span class="pre">wget</span></code> command in the terminal:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">wget</span> <span class="n">http</span><span class="p">:</span><span class="o">//</span><span class="n">cosmo</span><span class="o">.</span><span class="n">phys</span><span class="o">.</span><span class="n">hirosaki</span><span class="o">-</span><span class="n">u</span><span class="o">.</span><span class="n">ac</span><span class="o">.</span><span class="n">jp</span><span class="o">/</span><span class="n">takahasi</span><span class="o">/</span><span class="n">allsky_raytracing</span><span class="o">/</span><span class="n">sub1</span><span class="o">/</span><span class="n">nres12</span><span class="o">/</span><span class="n">allskymap_nres12r000</span><span class="o">.</span><span class="n">zs9</span><span class="o">.</span><span class="n">mag</span><span class="o">.</span><span class="n">dat</span>
+<p>This section provides a practical example of how to use <strong>wlcf</strong> from a
+Python notebook. The example follows a complete workflow:</p>
+<ol class="arabic simple">
+<li><p>Generate a linear matter power spectrum using CAMB.</p></li>
+<li><p>Run <code class="docutils literal notranslate"><span class="pre">wlcf</span></code> through the Python wrapper.</p></li>
+<li><p>Plot the resulting 3-point correlation function multipoles.</p></li>
+<li><p>Compare different theoretical models.</p></li>
+</ol>
+<p>The notebook associated with this tutorial can be used as a starting point
+for interactive runs and parameter exploration.</p>
+<section id="setting-up-the-working-directory">
+<h2>Setting up the working directory<a class="headerlink" href="#setting-up-the-working-directory" title="Link to this heading"></a></h2>
+<p>First, import the required Python packages and move to the <code class="docutils literal notranslate"><span class="pre">tests</span></code> directory
+of the repository:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">camb</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">camb</span><span class="w"> </span><span class="kn">import</span> <span class="n">model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">wlcfpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">wlcf</span>
+
+<span class="n">WLCF_TESTS_DIR</span> <span class="o">=</span> <span class="s2">&quot;/path/to/wlcf/tests&quot;</span>
+<span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="n">WLCF_TESTS_DIR</span><span class="p">)</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s2">&quot;input&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s2">&quot;Output&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="s2">&quot;Bell_outputs&quot;</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Then we will have in our working directory the file <code class="docutils literal notranslate"><span class="pre">allskymap_nres12r000.zs9.mag.dat</span></code>, 3 Gb in size with ~200 million points distributed on the surface of a unit sphere.</p>
+</section>
+<section id="generating-the-linear-power-spectrum">
+<h2>Generating the linear power spectrum<a class="headerlink" href="#generating-the-linear-power-spectrum" title="Link to this heading"></a></h2>
+<p>The linear matter power spectrum can be generated with CAMB. In this example
+we use a T17-like cosmology at redshift <span class="math notranslate nohighlight">\(z = 0.5078\)</span>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">make_camb_linear_pk</span><span class="p">(</span>
+    <span class="n">output_file</span><span class="o">=</span><span class="s2">&quot;./input/linear_pk_camb_T17_z05078.txt&quot;</span><span class="p">,</span>
+    <span class="n">z_pk</span><span class="o">=</span><span class="mf">0.5078</span><span class="p">,</span>
+    <span class="n">h</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+    <span class="n">Omb</span><span class="o">=</span><span class="mf">0.046</span><span class="p">,</span>
+    <span class="n">Omc</span><span class="o">=</span><span class="mf">0.233</span><span class="p">,</span>
+    <span class="n">Omnu</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">ns</span><span class="o">=</span><span class="mf">0.97</span><span class="p">,</span>
+    <span class="n">sigma8</span><span class="o">=</span><span class="mf">0.82</span><span class="p">,</span>
+    <span class="n">w0</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">kmin</span><span class="o">=</span><span class="mf">1e-4</span><span class="p">,</span>
+    <span class="n">kmax</span><span class="o">=</span><span class="mf">50.0</span><span class="p">,</span>
+    <span class="n">npoints</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+<span class="p">):</span>
+
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">output_file</span><span class="p">),</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="n">H0</span> <span class="o">=</span> <span class="mf">100.0</span> <span class="o">*</span> <span class="n">h</span>
+    <span class="n">ombh2</span> <span class="o">=</span> <span class="n">Omb</span> <span class="o">*</span> <span class="n">h</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">omch2</span> <span class="o">=</span> <span class="n">Omc</span> <span class="o">*</span> <span class="n">h</span><span class="o">**</span><span class="mi">2</span>
+
+    <span class="n">pars</span> <span class="o">=</span> <span class="n">camb</span><span class="o">.</span><span class="n">CAMBparams</span><span class="p">()</span>
+
+    <span class="c1"># For now we assume massless neutrinos, consistent with Omnu = 0.</span>
+    <span class="n">pars</span><span class="o">.</span><span class="n">set_cosmology</span><span class="p">(</span>
+        <span class="n">H0</span><span class="o">=</span><span class="n">H0</span><span class="p">,</span>
+        <span class="n">ombh2</span><span class="o">=</span><span class="n">ombh2</span><span class="p">,</span>
+        <span class="n">omch2</span><span class="o">=</span><span class="n">omch2</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">pars</span><span class="o">.</span><span class="n">InitPower</span><span class="o">.</span><span class="n">set_params</span><span class="p">(</span>
+        <span class="n">ns</span><span class="o">=</span><span class="n">ns</span><span class="p">,</span>
+        <span class="n">As</span><span class="o">=</span><span class="mf">2.1e-9</span>
+    <span class="p">)</span>
+
+    <span class="n">pars</span><span class="o">.</span><span class="n">set_dark_energy</span><span class="p">(</span><span class="n">w</span><span class="o">=</span><span class="n">w0</span><span class="p">)</span>
+
+    <span class="c1"># Linear power spectrum at the same redshift used by wlcf/zbin</span>
+    <span class="n">pars</span><span class="o">.</span><span class="n">set_matter_power</span><span class="p">(</span>
+        <span class="n">redshifts</span><span class="o">=</span><span class="p">[</span><span class="n">z_pk</span><span class="p">],</span>
+        <span class="n">kmax</span><span class="o">=</span><span class="n">kmax</span>
+    <span class="p">)</span>
+
+    <span class="n">pars</span><span class="o">.</span><span class="n">NonLinear</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">NonLinear_none</span>
+
+    <span class="c1"># First run to compute sigma8 for the trial As</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="n">camb</span><span class="o">.</span><span class="n">get_results</span><span class="p">(</span><span class="n">pars</span><span class="p">)</span>
+    <span class="n">sigma8_current</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">get_sigma8</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># Rescale As so that CAMB matches the requested sigma8</span>
+    <span class="n">As_rescaled</span> <span class="o">=</span> <span class="mf">2.1e-9</span> <span class="o">*</span> <span class="p">(</span><span class="n">sigma8</span> <span class="o">/</span> <span class="n">sigma8_current</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
+
+    <span class="n">pars</span><span class="o">.</span><span class="n">InitPower</span><span class="o">.</span><span class="n">set_params</span><span class="p">(</span>
+        <span class="n">ns</span><span class="o">=</span><span class="n">ns</span><span class="p">,</span>
+        <span class="n">As</span><span class="o">=</span><span class="n">As_rescaled</span>
+    <span class="p">)</span>
+
+    <span class="n">results</span> <span class="o">=</span> <span class="n">camb</span><span class="o">.</span><span class="n">get_results</span><span class="p">(</span><span class="n">pars</span><span class="p">)</span>
+
+    <span class="n">kh</span><span class="p">,</span> <span class="n">redshifts</span><span class="p">,</span> <span class="n">pk</span> <span class="o">=</span> <span class="n">results</span><span class="o">.</span><span class="n">get_matter_power_spectrum</span><span class="p">(</span>
+        <span class="n">minkh</span><span class="o">=</span><span class="n">kmin</span><span class="p">,</span>
+        <span class="n">maxkh</span><span class="o">=</span><span class="n">kmax</span><span class="p">,</span>
+        <span class="n">npoints</span><span class="o">=</span><span class="n">npoints</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">pk_z</span> <span class="o">=</span> <span class="n">pk</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="n">np</span><span class="o">.</span><span class="n">savetxt</span><span class="p">(</span>
+        <span class="n">output_file</span><span class="p">,</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">column_stack</span><span class="p">([</span><span class="n">kh</span><span class="p">,</span> <span class="n">pk_z</span><span class="p">]),</span>
+        <span class="n">fmt</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%.10e</span><span class="s2">&quot;</span>
+    <span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved linear P(k) at z=</span><span class="si">{</span><span class="n">z_pk</span><span class="si">}</span><span class="s2"> to:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">output_file</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;sigma8 target  = </span><span class="si">{</span><span class="n">sigma8</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;sigma8 CAMB    = </span><span class="si">{</span><span class="n">results</span><span class="o">.</span><span class="n">get_sigma8</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span><span class="si">:</span><span class="s2">.6f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;As rescaled    = </span><span class="si">{</span><span class="n">As_rescaled</span><span class="si">:</span><span class="s2">.6e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">kh</span><span class="p">,</span> <span class="n">pk_z</span>
+</pre></div>
+</div>
+<p>The resulting file is passed to <code class="docutils literal notranslate"><span class="pre">wlcf</span></code> through the parameter <code class="docutils literal notranslate"><span class="pre">fnamePS</span></code>.</p>
+</section>
+<section id="running-wlcf-from-python">
+<h2>Running wlcf from Python<a class="headerlink" href="#running-wlcf-from-python" title="Link to this heading"></a></h2>
+<p>The code can be executed directly from Python using the <code class="docutils literal notranslate"><span class="pre">wlcfpy</span></code> wrapper:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">w</span> <span class="o">=</span> <span class="n">wlcf</span><span class="p">()</span>
+<span class="n">w</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+    <span class="n">numberThreads</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">verbose_log</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+
+    <span class="n">z</span><span class="o">=</span><span class="mf">0.5078</span><span class="p">,</span>
+    <span class="n">h</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+    <span class="n">sigma8</span><span class="o">=</span><span class="mf">0.82</span><span class="p">,</span>
+    <span class="n">Omb</span><span class="o">=</span><span class="mf">0.046</span><span class="p">,</span>
+    <span class="n">Omc</span><span class="o">=</span><span class="mf">0.233</span><span class="p">,</span>
+    <span class="n">Omnu</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">ns</span><span class="o">=</span><span class="mf">0.97</span><span class="p">,</span>
+    <span class="n">w</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span>
+
+    <span class="n">fnamePS</span><span class="o">=</span><span class="s2">&quot;./input/linear_pk_camb_T17_z05078.txt&quot;</span><span class="p">,</span>
+    <span class="n">Wg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">fWgchi</span><span class="o">=</span><span class="s2">&quot;./input/Wg_Takahashi_z05078.txt&quot;</span><span class="p">,</span>
+
+    <span class="n">rootDir</span><span class="o">=</span><span class="s2">&quot;Output&quot;</span><span class="p">,</span>
+    <span class="n">path_Bells</span><span class="o">=</span><span class="s2">&quot;Bell_outputs&quot;</span><span class="p">,</span>
+    <span class="n">prefix</span><span class="o">=</span><span class="s2">&quot;halo_model_z05078_&quot;</span><span class="p">,</span>
+
+    <span class="n">tree_level</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">zbin</span><span class="o">=</span><span class="mf">0.5078</span><span class="p">,</span>
+    <span class="n">mMax</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">chiQuadSteps</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+    <span class="n">GLpoints</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+    <span class="n">Nell</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
+    <span class="n">ellmax</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
+    <span class="n">ellmin</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span>
+    <span class="n">writevectors</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">chatty</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">options</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="p">)</span>
+
+<span class="n">w</span><span class="o">.</span><span class="n">Run</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Here <code class="docutils literal notranslate"><span class="pre">tree_level=4</span></code> selects the Takahashi/Halo-model branch.</p>
+</section>
+<section id="plotting-the-3pcf-multipoles">
+<h2>Plotting the 3PCF multipoles<a class="headerlink" href="#plotting-the-3pcf-multipoles" title="Link to this heading"></a></h2>
+<p>The output files <code class="docutils literal notranslate"><span class="pre">zetam*.txt</span></code> contain the multipoles
+<span class="math notranslate nohighlight">\(\zeta_m(\theta_1,\theta_2)\)</span>. These can be visualized as 2D maps:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.colors</span><span class="w"> </span><span class="kn">import</span> <span class="n">LogNorm</span>
+
+<span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/home/sadi/LSST/test/wlcf-main/tests/Bell_outputs&quot;</span>
+<span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;halo_model_z05078_&quot;</span>
+
+<span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s2">theta_array.txt&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="mi">180</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">60</span>
+<span class="n">Theta2</span><span class="p">,</span> <span class="n">Theta1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">19</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+
+<span class="n">gs</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_gridspec</span><span class="p">(</span>
+    <span class="n">nrows</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">ncols</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span>
+    <span class="n">width_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.06</span><span class="p">],</span>
+    <span class="n">wspace</span><span class="o">=</span><span class="mf">0.25</span>
+<span class="p">)</span>
+
+<span class="n">norm</span> <span class="o">=</span> <span class="n">LogNorm</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="mf">1e-11</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">):</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">m</span><span class="p">])</span>
+
+    <span class="n">zeta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s2">zetam</span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2">.txt&quot;</span><span class="p">))</span>
+
+    <span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span>
+        <span class="n">Theta2</span><span class="p">,</span>
+        <span class="n">Theta1</span><span class="p">,</span>
+        <span class="n">zeta</span><span class="p">,</span>
+        <span class="n">shading</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;RdYlBu_r&quot;</span><span class="p">,</span>
+        <span class="n">norm</span><span class="o">=</span><span class="n">norm</span>
+    <span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">&quot;equal&quot;</span><span class="p">,</span> <span class="n">adjustable</span><span class="o">=</span><span class="s2">&quot;box&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">fr</span><span class="s2">&quot;$m=</span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2">$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">m</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\theta_1$ [arcmin]&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\theta_2$ [arcmin]&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span>
+
+<span class="c1"># Colorbar outside the plots</span>
+<span class="n">cax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">cbar</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">cax</span><span class="o">=</span><span class="n">cax</span><span class="p">)</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$|\zeta_m|$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">13</span><span class="p">)</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="mi">11</span><span class="p">)</span>
+
+<span class="n">fig</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span>
+    <span class="s2">&quot;Halo Model: 3PCF Multipoles at z = 0.5078&quot;</span><span class="p">,</span>
+    <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span>
+    <span class="n">y</span><span class="o">=</span><span class="mf">1.02</span>
+<span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;halo_model_3pcf.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/halo_model_3pcf.png"><img alt="_images/halo_model_3pcf.png" class="align-center" src="_images/halo_model_3pcf.png" style="width: 100%;" />
+</a>
+<p>Or we can plot</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/home/sadi/LSST/test/wlcf-main/tests/Bell_outputs&quot;</span>
+<span class="n">prefix</span> <span class="o">=</span> <span class="s2">&quot;halo_model_z05078_&quot;</span>
+
+<span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s2">theta_array.txt&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="mi">180</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">60</span>
+
+<span class="n">theta2_targets</span> <span class="o">=</span> <span class="p">[</span><span class="mi">13</span><span class="p">,</span> <span class="mi">72</span><span class="p">,</span> <span class="mi">169</span><span class="p">]</span>
+<span class="n">m_values</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span>
+    <span class="nb">len</span><span class="p">(</span><span class="n">theta2_targets</span><span class="p">),</span>
+    <span class="nb">len</span><span class="p">(</span><span class="n">m_values</span><span class="p">),</span>
+    <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">9</span><span class="p">,</span> <span class="mi">9</span><span class="p">),</span>
+    <span class="n">sharex</span><span class="o">=</span><span class="kc">True</span>
+<span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">theta2_fixed</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">theta2_targets</span><span class="p">):</span>
+    <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">theta</span> <span class="o">-</span> <span class="n">theta2_fixed</span><span class="p">))</span>
+    <span class="n">theta2_actual</span> <span class="o">=</span> <span class="n">theta</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
+
+    <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">m_values</span><span class="p">):</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">]</span>
+
+        <span class="n">zeta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s2">zetam</span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2">.txt&quot;</span><span class="p">))</span>
+
+        <span class="c1"># theta2 fixed, theta1 varies</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">zeta</span><span class="p">[:,</span> <span class="n">idx</span><span class="p">]</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;o&quot;</span><span class="p">,</span> <span class="n">markersize</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">fr</span><span class="s2">&quot;$m=</span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2">$&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span>
+                <span class="sa">fr</span><span class="s2">&quot;$\zeta_m(\theta_1,\theta_2=</span><span class="si">{</span><span class="n">theta2_actual</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">&#39;)$&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">theta2_targets</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\theta_1$ [arcmin]&quot;</span><span class="p">)</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;halo_model_slice_3pcf.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/halo_model_slice_3pcf.png"><img alt="_images/halo_model_slice_3pcf.png" class="align-center" src="_images/halo_model_slice_3pcf.png" style="width: 70%;" />
+</a>
+</section>
+<section id="comparing-different-models">
+<h2>Comparing different models<a class="headerlink" href="#comparing-different-models" title="Link to this heading"></a></h2>
+<p>We can run several theoretical models by changing
+<code class="docutils literal notranslate"><span class="pre">tree_level</span></code>:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">base_params</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+    <span class="n">numberThreads</span><span class="o">=</span><span class="mi">8</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">verbose_log</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+
+    <span class="c1"># T17 / paper cosmology</span>
+    <span class="n">z</span><span class="o">=</span><span class="mf">0.5078</span><span class="p">,</span>
+    <span class="n">h</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span>
+    <span class="n">sigma8</span><span class="o">=</span><span class="mf">0.82</span><span class="p">,</span>
+    <span class="n">Omb</span><span class="o">=</span><span class="mf">0.046</span><span class="p">,</span>
+    <span class="n">Omc</span><span class="o">=</span><span class="mf">0.233</span><span class="p">,</span>
+    <span class="n">Omnu</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>
+    <span class="n">ns</span><span class="o">=</span><span class="mf">0.97</span><span class="p">,</span>
+    <span class="n">w</span><span class="o">=-</span><span class="mf">1.0</span><span class="p">,</span>
+
+    <span class="c1"># Make sure this P(k) was generated with the same cosmology</span>
+    <span class="n">fnamePS</span><span class="o">=</span><span class="s2">&quot;./input/linear_pk_camb_T17_z05078.txt&quot;</span><span class="p">,</span>
+
+    <span class="c1"># Redshift bin</span>
+    <span class="n">Wg</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">fWgchi</span><span class="o">=</span><span class="s2">&quot;./input/Wg_Takahashi_z05078.txt&quot;</span><span class="p">,</span>
+
+    <span class="n">rootDir</span><span class="o">=</span><span class="s2">&quot;Output&quot;</span><span class="p">,</span>
+    <span class="n">path_Bells</span><span class="o">=</span><span class="s2">&quot;Bell_outputs&quot;</span><span class="p">,</span>
+
+    <span class="n">zbin</span><span class="o">=</span><span class="mf">0.5078</span><span class="p">,</span>
+    <span class="n">mMax</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">chiQuadSteps</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
+    <span class="n">GLpoints</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+    <span class="n">Nell</span><span class="o">=</span><span class="mi">128</span><span class="p">,</span>
+    <span class="n">ellmax</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
+    <span class="n">ellmin</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span>
+    <span class="n">writevectors</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">chatty</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">options</span><span class="o">=</span><span class="s2">&quot;&quot;</span>
+<span class="p">)</span>
+
+<span class="n">models</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;SPT&quot;</span><span class="p">,</span>
+    <span class="mi">2</span><span class="p">:</span> <span class="s2">&quot;Tree&quot;</span><span class="p">,</span>
+    <span class="mi">3</span><span class="p">:</span> <span class="s2">&quot;EFT&quot;</span><span class="p">,</span>
+    <span class="mi">4</span><span class="p">:</span> <span class="s2">&quot;Halo_model&quot;</span>
+<span class="p">}</span>
+
+<span class="k">for</span> <span class="n">tree_level</span><span class="p">,</span> <span class="n">model_name</span> <span class="ow">in</span> <span class="n">models</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Running </span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s2"> model with tree_level=</span><span class="si">{</span><span class="n">tree_level</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="n">params</span> <span class="o">=</span> <span class="n">base_params</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">params</span><span class="p">[</span><span class="s2">&quot;tree_level&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tree_level</span>
+    <span class="n">params</span><span class="p">[</span><span class="s2">&quot;prefix&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_name</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span><span class="si">}</span><span class="s2">_z05078_&quot;</span>
+
+    <span class="n">w</span> <span class="o">=</span> <span class="n">wlcf</span><span class="p">()</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+    <span class="n">w</span><span class="o">.</span><span class="n">Run</span><span class="p">()</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Finished </span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>We plot the different cases</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">rcParams</span><span class="o">.</span><span class="n">update</span><span class="p">({</span>
+    <span class="s2">&quot;font.size&quot;</span><span class="p">:</span> <span class="mi">14</span><span class="p">,</span>
+    <span class="s2">&quot;axes.titlesize&quot;</span><span class="p">:</span> <span class="mi">16</span><span class="p">,</span>
+    <span class="s2">&quot;axes.labelsize&quot;</span><span class="p">:</span> <span class="mi">14</span>
+<span class="p">})</span>
+
+<span class="n">path</span> <span class="o">=</span> <span class="s2">&quot;/home/sadi/LSST/test/wlcf-main/tests/Bell_outputs&quot;</span>
+
+<span class="n">models</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;SPT&quot;</span><span class="p">:</span> <span class="s2">&quot;spt_z05078_&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Tree&quot;</span><span class="p">:</span> <span class="s2">&quot;tree_z05078_&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;EFT&quot;</span><span class="p">:</span> <span class="s2">&quot;eft_z05078_&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Halo Model&quot;</span><span class="p">:</span> <span class="s2">&quot;halo_model_z05078_&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="n">m_values</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="n">theta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">/spt_z05_theta_array.txt&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="mi">180</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="mi">60</span>
+<span class="n">Theta2</span><span class="p">,</span> <span class="n">Theta1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">theta</span><span class="p">)</span>
+
+<span class="n">nrows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">models</span><span class="p">)</span>
+<span class="n">ncols</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">m_values</span><span class="p">)</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">13</span><span class="p">))</span>
+
+<span class="n">gs</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_gridspec</span><span class="p">(</span>
+    <span class="n">nrows</span><span class="o">=</span><span class="n">nrows</span><span class="p">,</span>
+    <span class="n">ncols</span><span class="o">=</span><span class="n">ncols</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>
+    <span class="n">width_ratios</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">],</span>
+    <span class="n">wspace</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span>
+    <span class="n">hspace</span><span class="o">=</span><span class="mf">0.25</span>
+<span class="p">)</span>
+
+<span class="n">norm</span> <span class="o">=</span> <span class="n">LogNorm</span><span class="p">(</span><span class="n">vmin</span><span class="o">=</span><span class="mf">1e-11</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">1e-8</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="p">(</span><span class="n">model_name</span><span class="p">,</span> <span class="n">prefix</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">items</span><span class="p">()):</span>
+    <span class="k">for</span> <span class="n">j</span><span class="p">,</span> <span class="n">m</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">m_values</span><span class="p">):</span>
+
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">j</span><span class="p">])</span>
+
+        <span class="n">zeta</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">loadtxt</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">prefix</span><span class="si">}</span><span class="s2">zetam</span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2">.txt&quot;</span><span class="p">))</span>
+
+        <span class="n">im</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span>
+            <span class="n">Theta2</span><span class="p">,</span>
+            <span class="n">Theta1</span><span class="p">,</span>
+            <span class="n">zeta</span><span class="p">,</span>
+            <span class="n">shading</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;RdYlBu_r&quot;</span><span class="p">,</span>
+            <span class="n">norm</span><span class="o">=</span><span class="n">norm</span>
+        <span class="p">)</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_yscale</span><span class="p">(</span><span class="s2">&quot;log&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylim</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="sa">fr</span><span class="s2">&quot;$m=</span><span class="si">{</span><span class="n">m</span><span class="si">}</span><span class="s2">$&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">model_name</span><span class="si">}</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="sa">r</span><span class="s2">&quot;$\theta_1$ [arcmin]&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="n">nrows</span> <span class="o">-</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$\theta_2$ [arcmin]&quot;</span><span class="p">)</span>
+
+<span class="n">cax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="n">gs</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">cbar</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">im</span><span class="p">,</span> <span class="n">cax</span><span class="o">=</span><span class="n">cax</span><span class="p">)</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$|\zeta_m|$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;models_3pcf.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<a class="reference internal image-reference" href="_images/models_3pcf.png"><img alt="_images/models_3pcf.png" class="align-center" src="_images/models_3pcf.png" style="width: 100%;" />
+</a>
+</section>
 </section>
 
 
@@ -95,13 +523,13 @@
           </div>
           <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
         <a href="python.html" class="btn btn-neutral float-left" title="Python interface" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
-        <a href="2pcf.html" class="btn btn-neutral float-right" title="2-point correlation functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+        <a href="3pcf.html" class="btn btn-neutral float-right" title="3-point correlation functions" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
     </div>
 
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Mario A. Rodriguez-Meza.</p>
+    <p>&#169; Copyright 2024, Alejandro Avilés.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

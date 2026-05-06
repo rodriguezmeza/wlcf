@@ -1,144 +1,242 @@
 't" t
-.TH wlcf 1 "April 2026" UNIX "LSST/S3 PROJECT"
+.TH wlcf 1 "May 2026" UNIX "LSST/S3 PROJECT"
 .na
-.nh   
+.nh
 
 .SH NAME
-wlcf - (2,3)-Point Correlation Function modeling computation code
+wlcf \- Weak Lensing Correlation Functions computation code
+
 .SH SYNOPSIS
 \fBwlcf\fR [ \fIparameter_file_name\fR ] [ \fIoptions\fR ]
 .sp
 
 .SH DESCRIPTION
-\fBwlcf\fR - computes the 2 or/and 3 point correlation functions using tree/balls methods, complexity O(N Log N).
+\fBwlcf\fR computes weak lensing correlation functions using perturbation theory,
+effective field theory, and halo-model inspired methods.
+
+The code is designed to compute multipoles of the three-point correlation
+function (3PCF) of the weak lensing convergence field in a plane-wave expansion.
 
 .SH OPTIONS
-All the options have the structure
+All command-line options have the structure
 .sp
 $ \fIoption_name\fR=<option_value>
 .sp
-except option \fB-help\fR. No space between \fIoption_name\fR, '=' and <option_value>
+except the option \fB--help\fR. No spaces should be used between
+\fIoption_name\fR, '=' and \fIoption_value\fR in command-line mode.
 .sp
 
-Options and their possible values are:
-
-.IP "\fB-help\fR" 12
-By writting
-
+.IP "\fB--help\fR" 12
+Prints the list of available parameters and their default values:
 .sp
 $ wlcf --help
 .sp
 
-you will get the list of all parameters and their default values. An option may have an alias which is a short name of the option. If an option has an alias in the list above it comes after its description surrounded by brackets tagged with 'a:'. For example,
-
+Some options may have aliases. In the help output, aliases are indicated with
+the tag [a: alias]. For example:
 .sp
-option_name=<option_value>	... Description ... [a: opt]
+option_name=<option_value>     Description     [a: opt]
 .sp
-here 'opt' is the short name of the option. In the description of the options below, when an option has an alias it will be noted in the same way but before its description.
 
 .IP "\fBparamfile\fR" 12
-is the name file with the values of the input parameters. Overwrite parameters
-values below. You may input this filename by only writing:
+Name of the file containing input parameter values. Parameters in this file
+overwrite default values.
 .sp
-$ wlcf paramfile=parameters_input_file_name
+$ wlcf paramfile=parameters_input_file
 .sp
-Parameter input file may be created by hand with the editor of your choice. Comment lines start with an "#" or "%". Follow each name option with a blank-space, "=", blank-space and the option value (note the difference when using command line version instead of parameter file version). The order of the option lines does not matter.  Also you may create an example input file by executing
+
+Parameter files can be created manually. Comment lines start with "#" or "%".
+In a parameter file, use the format:
+.sp
+option_name = option_value
+.sp
+
+The order of parameters does not matter. Running the code with default values:
 .sp
 $ wlcf
 .sp
-This will run the \fBwlcf\fR code with default values and when it finish you will have in your running output directory (by default is 'Output', see below in 'rootDir' line) the file "parameters_null-wlcf-usedvalues". Now you may edit this file to adapt to your own run parameters. This file can be overwritten so it may be helpful to change this file name to whatever apropriate, and move it elsewhere.
-
+creates a file with the parameters used in the run, for example:
 .sp
-Note that parameter alias are not allowed in a parameter file. Also behaviour of Mac and Linux plataforms are different when they reach the end of line in a text file. Then would be necessary to add a blank line at the end of the parameter file.
+parameters_null-wlcf-usedvalues
+.sp
+or a similarly named file inside the output directory. This file can be used
+as a template for custom parameter files.
+
+.SH COSMOLOGICAL PARAMETERS
 
 .IP "\fBz\fR" 12
-is redshift to use.
+Redshift used in the computation.
 
 .IP "\fBh\fR" 12
-Hubble parameter.
+Dimensionless Hubble parameter.
 
 .IP "\fBsigma8\fR" 12
-[a: s8] sigma8.
+[a: s8] Normalization of the matter power spectrum.
 
 .IP "\fBOmb\fR" 12
-dark matter content: Omega CDM.
+Baryon density parameter.
 
 .IP "\fBOmc\fR" 12
-baryon content: Omega baryon.
+Cold dark matter density parameter.
 
 .IP "\fBOmnu\fR" 12
-massive neutrinos: Omega nu.
+Massive neutrino density parameter.
 
 .IP "\fBns\fR" 12
-spectral index of linear P(k).
+Spectral index of the linear power spectrum.
 
 .IP "\fBw\fR" 12
-equation of state of dark energy.
+Dark energy equation of state parameter.
+
+.SH INPUT PARAMETERS
 
 .IP "\fBfnamePS\fR" 12
-[a: ps] linear power spectrum.
+[a: ps] Linear matter power spectrum file.
+
+.IP "\fBWg\fR" 12
+Weak lensing kernel option. If Wg=0, the code uses a Dirac delta at the
+redshift bin. If Wg=1, the kernel is read from file.
+
+.IP "\fBfWgchi\fR" 12
+[a: fwgchi] File containing the weak lensing kernel Wg(chi).
+
+.SH MODEL AND NUMERICAL PARAMETERS
+
+.IP "\fBtree_level\fR" 12
+Selects the theoretical model used for the bispectrum calculation:
+.sp
+1 = Standard Perturbation Theory (SPT)
+.br
+2 = P2 approximation
+.br
+3 = Effective Field Theory (EFT)
+.br
+4 or larger = Takahashi/Halo-model inspired bispectrum
+
+.IP "\fBzbin\fR" 12
+Redshift bin used in the projection.
+
+.IP "\fBmMax\fR" 12
+Maximum multipole order to compute.
+
+.IP "\fBchiQuadSteps\fR" 12
+[a: chiqst] Number of integration steps in comoving distance.
+
+.IP "\fBGLpoints\fR" 12
+[a: gl] Number of Gauss-Legendre integration points.
+
+.IP "\fBNell\fR" 12
+Number of angular multipole values.
+
+.IP "\fBellmin\fR" 12
+Minimum multipole value.
+
+.IP "\fBellmax\fR" 12
+Maximum multipole value.
+
+.SH OUTPUT PARAMETERS
 
 .IP "\fBrootDir\fR" 12
-[a: root] gives output dir, where output files will be written. If this folder does not exist it will be created. If it does exist it will be overwritten.
+[a: root] Output directory where files will be written. If the directory does
+not exist, it will be created.
 
-.IP "\fprefix\fR" 12
-[a: pre] prefix to use in output file names.
+.IP "\fBprefix\fR" 12
+[a: pre] Prefix used for output file names.
 
 .IP "\fBpath_Bells\fR" 12
-[a: bellout]  Output dir, where output files will be written.
+[a: bellout] Directory where angular correlation function outputs are written.
 
-.IP "\fBpreScript\fR" 12
-scripts in shell or python that can be run in pre-processing. Use in combinations with 'options=pre-processing'. Last setting is necessary to activate the script.
+.IP "\fBwritevectors\fR" 12
+If true, intermediate vectors are written to output files.
 
-.IP "\fBposScript\fR" 12
-scripts in shell or python that can be run in post-processing. Use in combinations with 'options=post-processing'. Last setting is necessary to activate the script.
+.SH MISCELLANEOUS PARAMETERS
 
 .IP "\fBverbose\fR" 12
-[a: verb] to print messages to standard output (stdout). There are four levels of information. When is "0", no information is written.
+[a: verb] Controls the amount of information printed to standard output.
 
 .IP "\fBverbose_log\fR" 12
-[a: verblog] to save messages to a log file (in directory "tmp"). When is "0" no information is written.
+[a: verblog] Controls the amount of information written to the log file.
+
+.IP "\fBchatty\fR" 12
+Additional verbosity level for internal messages.
 
 .IP "\fBnumberThreads\fR" 12
-[a: nthreads] To set the number of threads to use (OpenMP).
+[a: nthreads] Number of OpenMP threads used during execution. OpenMP must be
+enabled at compilation time.
 
 .IP "\fBoptions\fR" 12
-[a: opt] you may give here various code behavior options, like 'smooth-pivot', 'stop', 'pre-processing', 'post-processing', etcetera.
+[a: opt] Additional code behavior options.
 
 .SH EXAMPLES
 
-Note: It is assumed that working directory is cTreeBalls, as was created when was git cloned. First create the executable, 'wlcf':
+Compile the executable:
+.sp
+$ make clean; make
+.sp
 
+Compile the executable and Python wrapper:
 .sp
 $ make clean; make all
-
 .sp
-cd tests
 
+Run the default test:
 .sp
-$ time ../wlcf ps=./input/linear_pk_Takahashi_z0.txt verb=2
+$ cd tests
+.br
+$ ../wlcf
+.sp
 
+Run with a custom linear power spectrum:
 .sp
-You will have computations written in files in a directory named with option \fBrootDir\fR. Not given here then it is used default 'Output'. If this directory does not exist, it will be created.
-Also will be created a directory named "tmp" in this output folder, where a log file will be saved.
+$ ../wlcf ps=./input/linear_pk_Takahashi_z0.txt verb=2
+.sp
 
+Run the EFT branch:
 .sp
-We finish with the following example:
+$ ../wlcf tree_level=3 ps=./input/linear_pk_Takahashi_z0.txt
+.sp
 
+Run the Takahashi/Halo-model branch:
 .sp
-$ time python python/kappa_corr.py
+$ ../wlcf tree_level=4 ps=./input/linear_pk_Takahashi_z0.txt
+.sp
 
-.sp
-Plot the results with:
+.SH PYTHON INTERFACE
 
+The Python wrapper can be used as:
 .sp
-$ python python/xi3pcf_flatten_curves.py
+$ python
+.sp
+>>> from wlcfpy import wlcf
+.br
+>>> w = wlcf()
+.br
+>>> w.set(numberThreads=8, tree_level=4)
+.br
+>>> w.Run()
+.sp
 
+.SH OUTPUT FILES
+
+The code writes output files using the selected prefix. Typical output files
+include:
 .sp
-Note: python version 3 was used with numpy and matplotlib modules installed.
+theta_array.txt
+.br
+karray.txt
+.br
+Bmells_*.txt
+.br
+Bnk_*.txt
+.br
+zetam*.txt
+.sp
+
+The files zetam*.txt contain the multipoles of the 3PCF,
+zeta_m(theta1, theta2).
 
 .SH SEE ALSO
-fkpt(1) mgpt(1) cballs(1) wlcf(1)
+cballs(1)
 
 .SH COPYRIGHT
 Copyright (C) 2026--

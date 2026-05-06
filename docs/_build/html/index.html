@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>wlcf documentation &mdash; cTreeBalls 1.0.0 documentation</title>
+  <title>wlcf documentation &mdash; WLCF 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
@@ -31,7 +31,7 @@
           
           
           <a href="#" class="icon icon-home">
-            cTreeBalls
+            WLCF
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -44,14 +44,13 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">WLCF Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="params.html">Parameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ps_files.html">Linear power spectrum files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pre_post_process.html">Pre/Post processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="addons.html">AddOn’s</a></li>
 <li class="toctree-l1"><a class="reference internal" href="python.html">Python interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="handson.html">Hands on</a></li>
-<li class="toctree-l1"><a class="reference internal" href="2pcf.html">2-point correlation functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3pcf.html">3-point correlation functions</a></li>
 </ul>
 
@@ -61,7 +60,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="#">cTreeBalls</a>
+          <a href="#">WLCF</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -85,55 +84,44 @@
 <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="overview.html#wlcf-weak-lensing-correlation-function">wlcf: Weak Lensing Correlation Function</a></li>
 <li class="toctree-l2"><a class="reference internal" href="overview.html#introduction">Introduction</a></li>
 <li class="toctree-l2"><a class="reference internal" href="overview.html#compiling-and-getting-started">Compiling and getting started</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#configuration">Configuration</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#parameters">Parameters</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#python">Python</a></li>
-<li class="toctree-l2"><a class="reference internal" href="overview.html#plotting-utilities">Plotting utilities</a></li>
 <li class="toctree-l2"><a class="reference internal" href="overview.html#license">License</a></li>
 <li class="toctree-l2"><a class="reference internal" href="overview.html#acknowledgements">Acknowledgements</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#makefile">Makefile</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#makefile-settings">Makefile settings</a></li>
-<li class="toctree-l2"><a class="reference internal" href="installation.html#makefile-plataform-machine">Makefile plataform machine</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">WLCF Installation</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#requirements">Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="installation.html#compilation">Compilation</a></li>
 </ul>
 </li>
 <li class="toctree-l1"><a class="reference internal" href="params.html">Parameters</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="params.html#parameters-related-to-the-searching-method">Parameters related to the searching method</a></li>
-<li class="toctree-l2"><a class="reference internal" href="params.html#parameters-to-control-the-i-o-file-s">Parameters to control the I/O file(s)</a></li>
-<li class="toctree-l2"><a class="reference internal" href="params.html#parameters-to-control-histograms-and-their-output-files">Parameters to control histograms and their output files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="params.html#set-of-parameters-needed-to-construct-a-test-model">Set of parameters needed to construct a test model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="params.html#parameters-related-to-the-cosmological-model">Parameters related to the cosmological model</a></li>
+<li class="toctree-l2"><a class="reference internal" href="params.html#parameters-to-control-the-input-power-spectrum">Parameters to control the input power spectrum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="params.html#parameters-related-to-the-weak-lensing-kernel">Parameters related to the weak lensing kernel</a></li>
+<li class="toctree-l2"><a class="reference internal" href="params.html#parameters-controlling-the-model-and-numerical-setup">Parameters controlling the model and numerical setup</a></li>
+<li class="toctree-l2"><a class="reference internal" href="params.html#parameters-to-control-output-files">Parameters to control output files</a></li>
 <li class="toctree-l2"><a class="reference internal" href="params.html#miscellaneous-parameters">Miscellaneous parameters</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="ps_files.html">Linear power spectrum files</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="ps_files.html#standard-formats">Standard formats</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="ps_files.html">Linear power spectrum files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pre_post_process.html">Pre/Post processing</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="pre_post_process.html#pre-processing">Pre-processing</a></li>
-<li class="toctree-l2"><a class="reference internal" href="pre_post_process.html#post-processing">Post-processing</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pre_post_process.html#pre-processing"><strong>Pre-processing</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="pre_post_process.html#post-processing"><strong>Post-processing</strong></a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="addons.html">AddOn’s</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="addons.html#include-files">Include files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="addons.html#source-files">Source files</a></li>
+<li class="toctree-l1"><a class="reference internal" href="addons.html">AddOn’s</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python.html">Python interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="handson.html">Hands on</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="handson.html#setting-up-the-working-directory">Setting up the working directory</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handson.html#generating-the-linear-power-spectrum">Generating the linear power spectrum</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handson.html#running-wlcf-from-python">Running wlcf from Python</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handson.html#plotting-the-3pcf-multipoles">Plotting the 3PCF multipoles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="handson.html#comparing-different-models">Comparing different models</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="python.html">Python interface</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="python.html#using-command-line-interface">Using command line interface</a></li>
-<li class="toctree-l2"><a class="reference internal" href="python.html#cython-interface">Cython interface</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="handson.html">Hands on</a></li>
-<li class="toctree-l1"><a class="reference internal" href="2pcf.html">2-point correlation functions</a></li>
-<li class="toctree-l1"><a class="reference internal" href="3pcf.html">3-point correlation functions</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="3pcf.html#harmonic-base">Harmonic base</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="3pcf.html">3-point correlation functions</a></li>
 </ul>
 </div>
 </section>
@@ -156,7 +144,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Mario A. Rodriguez-Meza.</p>
+    <p>&#169; Copyright 2024, Alejandro Avilés.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

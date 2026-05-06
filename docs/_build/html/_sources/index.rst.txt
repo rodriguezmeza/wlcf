@@ -18,7 +18,6 @@ wlcf documentation
    addons
    python
    handson
-   2pcf
    3pcf
 
 

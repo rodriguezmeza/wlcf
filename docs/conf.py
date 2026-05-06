@@ -17,9 +17,9 @@
 
 # -- Project information -----------------------------------------------------
 
-project = 'cTreeBalls'
-copyright = '2024, Mario A. Rodriguez-Meza'
-author = 'Mario A. Rodriguez-Meza'
+project = 'WLCF'
+copyright = '2024, Alejandro Avilés'
+author = 'Alejandro Avilés'
 
 # The full version, including alpha/beta/rc tags
 release = '1.0.0'
@@ -45,7 +45,7 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 # -- Options for HTML output -------------------------------------------------
 
 # The theme to use for HTML and HTML Help pages.  See the documentation for
-# a list of builtin themes.
+# a list of built-in themes.
 #
 #html_theme = 'alabaster'
 #html_theme = 'sphinx_book_theme'

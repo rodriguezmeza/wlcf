@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AddOn’s &mdash; cTreeBalls 1.0.0 documentation</title>
+  <title>AddOn’s &mdash; WLCF 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
@@ -32,7 +32,7 @@
           
           
           <a href="index.html" class="icon icon-home">
-            cTreeBalls
+            WLCF
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -45,18 +45,13 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">WLCF Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="params.html">Parameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ps_files.html">Linear power spectrum files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pre_post_process.html">Pre/Post processing</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">AddOn’s</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#include-files">Include files</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#source-files">Source files</a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">AddOn’s</a></li>
 <li class="toctree-l1"><a class="reference internal" href="python.html">Python interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="handson.html">Hands on</a></li>
-<li class="toctree-l1"><a class="reference internal" href="2pcf.html">2-point correlation functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3pcf.html">3-point correlation functions</a></li>
 </ul>
 
@@ -66,7 +61,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">cTreeBalls</a>
+          <a href="index.html">WLCF</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -86,13 +81,74 @@
              
   <section id="addon-s">
 <h1>AddOn’s<a class="headerlink" href="#addon-s" title="Link to this heading"></a></h1>
-<p>This section describes the mechanism to add more functionally to cBalls:</p>
-<section id="include-files">
-<h2>Include files<a class="headerlink" href="#include-files" title="Link to this heading"></a></h2>
-</section>
-<section id="source-files">
-<h2>Source files<a class="headerlink" href="#source-files" title="Link to this heading"></a></h2>
-</section>
+<p>This section describes how to extend the functionality of <strong>wlcf</strong> by adding new features, models, or utilities to the codebase.</p>
+<p>The modular structure of the code allows users to include additional functionality through custom header and source files.</p>
+<p><strong>Include files</strong></p>
+<p>Header files define the interface of new functionalities and must be placed in the appropriate include directories.</p>
+<p>To add new features:</p>
+<ol class="arabic">
+<li><p>Create a header file (e.g., <cite>my_module.h</cite>)</p></li>
+<li><p>Place it in one of the include directories:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">include</span><span class="o">/</span>
+<span class="n">addons</span><span class="o">/</span><span class="n">addons_include</span><span class="o">/</span>
+</pre></div>
+</div>
+</li>
+<li><p>Declare functions, structures, or parameters inside the header.</p></li>
+</ol>
+<p>Example</p>
+<p>c:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#ifndef MY_MODULE_H</span>
+<span class="c1">#define MY_MODULE_H</span>
+<span class="n">void</span> <span class="n">my_new_function</span><span class="p">(</span><span class="n">double</span> <span class="o">*</span><span class="nb">input</span><span class="p">,</span> <span class="n">double</span> <span class="o">*</span><span class="n">output</span><span class="p">);</span>
+<span class="c1">#endif</span>
+</pre></div>
+</div>
+<ol class="arabic simple" start="4">
+<li><p>Include the header in the relevant source files:</p></li>
+</ol>
+<p>c:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &quot;my_module.h&quot;</span>
+</pre></div>
+</div>
+<p><strong>Source files</strong></p>
+<p>Source files implement the functionality declared in the header files.</p>
+<p>To add a new module:</p>
+<ol class="arabic">
+<li><p>Create a source file (e.g., <cite>my_module.c</cite>)</p></li>
+<li><p>Place it in one of the source directories:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">source</span><span class="o">/</span>
+<span class="n">addons</span><span class="o">/</span>
+</pre></div>
+</div>
+</li>
+<li><p>Implement the functions:</p></li>
+</ol>
+<p>c:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#include &quot;my_module.h&quot;</span>
+<span class="n">void</span> <span class="n">my_new_function</span><span class="p">(</span><span class="n">double</span> <span class="o">*</span><span class="nb">input</span><span class="p">,</span> <span class="n">double</span> <span class="o">*</span><span class="n">output</span><span class="p">)</span> <span class="p">{</span>
+<span class="o">//</span> <span class="n">Example</span> <span class="n">computation</span>
+<span class="o">*</span><span class="n">output</span> <span class="o">=</span> <span class="nb">input</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mf">2.0</span><span class="p">;}</span>
+</pre></div>
+</div>
+<p><strong>Compilation</strong></p>
+<p>To ensure the new files are compiled:</p>
+<ul class="simple">
+<li><p>Add the source file to the build system (if not automatically included)</p></li>
+<li><p>Modify <cite>Makefile</cite> or <cite>Makefile_machine</cite> if necessary</p></li>
+</ul>
+<p>Example (if manual inclusion is needed):</p>
+<p>make:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">SRC</span> <span class="o">+=</span> <span class="n">source</span><span class="o">/</span><span class="n">my_module</span><span class="o">.</span><span class="n">c</span>
+</pre></div>
+</div>
+<p><strong>Integration</strong></p>
+<p>To integrate the new functionality into <strong>wlcf</strong>:</p>
+<ul class="simple">
+<li><p>Call your new functions from existing modules (e.g., in <cite>procedures.c</cite>)</p></li>
+<li><p>Ensure parameters are passed correctly</p></li>
+<li><p>Update relevant headers if new parameters are introduced</p></li>
+</ul>
 </section>
 
 
@@ -106,7 +162,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Mario A. Rodriguez-Meza.</p>
+    <p>&#169; Copyright 2024, Alejandro Avilés.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a

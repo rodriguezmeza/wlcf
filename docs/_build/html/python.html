@@ -6,7 +6,7 @@
   <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Python interface &mdash; cTreeBalls 1.0.0 documentation</title>
+  <title>Python interface &mdash; WLCF 1.0.0 documentation</title>
       <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
       <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
@@ -32,7 +32,7 @@
           
           
           <a href="index.html" class="icon icon-home">
-            cTreeBalls
+            WLCF
           </a>
 <div role="search">
   <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
@@ -45,18 +45,13 @@
               <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">WLCF Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="params.html">Parameters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="ps_files.html">Linear power spectrum files</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pre_post_process.html">Pre/Post processing</a></li>
 <li class="toctree-l1"><a class="reference internal" href="addons.html">AddOn’s</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Python interface</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#using-command-line-interface">Using command line interface</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#cython-interface">Cython interface</a></li>
-</ul>
-</li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Python interface</a></li>
 <li class="toctree-l1"><a class="reference internal" href="handson.html">Hands on</a></li>
-<li class="toctree-l1"><a class="reference internal" href="2pcf.html">2-point correlation functions</a></li>
 <li class="toctree-l1"><a class="reference internal" href="3pcf.html">3-point correlation functions</a></li>
 </ul>
 
@@ -66,7 +61,7 @@
 
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
-          <a href="index.html">cTreeBalls</a>
+          <a href="index.html">WLCF</a>
       </nav>
 
       <div class="wy-nav-content">
@@ -86,13 +81,56 @@
              
   <section id="python-interface">
 <h1>Python interface<a class="headerlink" href="#python-interface" title="Link to this heading"></a></h1>
-<p>This section describes the mechanism to add more functionally to cBalls:</p>
-<section id="using-command-line-interface">
-<h2>Using command line interface<a class="headerlink" href="#using-command-line-interface" title="Link to this heading"></a></h2>
-</section>
-<section id="cython-interface">
-<h2>Cython interface<a class="headerlink" href="#cython-interface" title="Link to this heading"></a></h2>
-</section>
+<p>This section describes how to interact with <strong>wlcf</strong> using Python, either through the command line interface or via the Cython wrapper.</p>
+<p><strong>Using command line interface</strong></p>
+<p>The simplest way to run <strong>wlcf</strong> from Python is by calling the executable through the system shell.</p>
+<p>Example</p>
+<p>python:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+
+<span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s2">&quot;../wlcf z=0.5 sigma8=0.8 fnamePS=./input/linear_pk.txt&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Alternatively, using <cite>subprocess</cite> :</p>
+<p>python:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">subprocess</span>
+
+<span class="n">subprocess</span><span class="o">.</span><span class="n">run</span><span class="p">([</span>
+    <span class="s2">&quot;../wlcf&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;z=0.5&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;sigma8=0.8&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;fnamePS=./input/linear_pk.txt&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+<p>This approach allows you to:</p>
+<ul class="simple">
+<li><p>run parameter scans</p></li>
+<li><p>automate workflows</p></li>
+<li><p>integrate wlcf into larger pipelines</p></li>
+</ul>
+<p>When using the command line interface, parameters must be passed as <cite>key=value</cite> without spaces.</p>
+<p><strong>Cython interface</strong></p>
+<p>The code provides a <strong>Cython wrapper</strong> that allows direct interaction with wlcf from Python without invoking the executable.</p>
+<p>example</p>
+<p>python:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">wlcfpy</span><span class="w"> </span><span class="kn">import</span> <span class="n">wlcf</span>
+
+<span class="n">w</span> <span class="o">=</span> <span class="n">wlcf</span><span class="p">()</span>
+
+<span class="n">w</span><span class="o">.</span><span class="n">set</span><span class="p">(</span>
+    <span class="n">numberThreads</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">fnamePS</span><span class="o">=</span><span class="s2">&quot;./input/linear_pk.txt&quot;</span><span class="p">)</span>
+
+<span class="n">w</span><span class="o">.</span><span class="n">Run</span><span class="p">()</span>
+</pre></div>
+</div>
+<p><strong>Notes</strong></p>
+<ul class="simple">
+<li><p>The working directory should contain the required input files (e.g., power spectrum).</p></li>
+<li><p>Output files are written in the same way as the C executable.</p></li>
+<li><p>Some parameters (e.g., number of threads) may be controlled both via Python and internally by the code.</p></li>
+</ul>
 </section>
 
 
@@ -106,7 +144,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2024, Mario A. Rodriguez-Meza.</p>
+    <p>&#169; Copyright 2024, Alejandro Avilés.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
