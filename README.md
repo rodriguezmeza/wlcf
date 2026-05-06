@@ -1,7 +1,9 @@
 # wlcf: Weak leansing correlation function modeling
 
-Authors: 
+Author: 
 - Alejandro Aviles (ICF-UNAM, Mexico), avilescervantes@gmail.com, aviles@icf.unam.mx
+
+Major contributors:
 - Juan Carlos Hidalgo (ICF-UNAM, Mexico), hidalgo@icf.unam.mx
 - Eladio A. Moreno-Alcala (UG, Mexico), ea.morenoalcala@ugto.mx
 - Gustavo Niz-Quevedo (UG, Mexico), g.niz@ugto.mx
@@ -21,7 +23,7 @@ Authors:
 
 ## Introduction
 
-**w**lcf is a C code for computing correlation functions using SPT, EFT and Halo model. So far can compute only the 3-point correlation function (3pcf) for galaxy weak leansing convergence in a plane wave expansion.
+**wlcf** is a C code for computing correlation functions using SPT, EFT and Halo model. So far can compute only the 3-point correlation function (3pcf) for galaxy weak leansing convergence in a plane wave expansion.
 
 A short documentation can be found in a html version of the man (linux manual) version man. Look for it (`docs/man/wlcf.html`) an open it with a web explorer.
 
@@ -53,14 +55,9 @@ Directory `Output` is already created then **wlcf** will overwritte all histogra
 
 To see a plot of the 2pcf, edit parameters_explained and set option to "post-processing" and execute again:
  
-    $ ../cballs parameters_explained
+    $ ../wlcf parameters_explained
 
 At the end of the run you will, as before, have a pdf file of the plot.
-
-By default **cBalls** reads/writes catalog of points to analyzed files in 4-column format with x, y, z columns first and then value of the convergence field. It has a two line header:
-
-    # nbody NDIM Lx Ly Lz
-    # nbody-value NDIM-value Lx Ly Lz - values
 
 Try running:
 
@@ -92,7 +89,7 @@ cBalls can be configured by switching on/off several options. Configuration file
 | `ADDONSON`  | `= 1` for adding more funcionality to the code, like other searching methods, other catalog formats                                                                                                |
 
 **Note**:
-After changing `Makefile_settings` in order to have the new settings active in **cBalls** you have to re-compile the code: `make clean; make`. 
+After changing `Makefile_settings` in order to have the new settings active in **wlcf** you have to re-compile the code: `make clean; make`. 
 
 ## Parameters
 
@@ -104,7 +101,7 @@ See also the man page as explained above. If you execute:
 
     $ ../cballs --clue
 
-you will receive in response how **cBalls** should be executed using command line parameters. Just pick up the parameteres you need and, if necessary, modify their values according to your needs.
+you will receive in response how **wlcf** should be executed using command line parameters. Just pick up the parameteres you need and, if necessary, modify their values according to your needs.
 
 ## Python
 
@@ -120,16 +117,14 @@ Note: this interface in Cython was tested in a python environment with `python3.
 
 ## Plotting utilities
 
-Several Jupyter notebooks, written by Abraham Arvizu and Eladio Moreno, are available to process cBalls results. They are in the github repository: 
+Several Jupyter notebooks, written by Sadi Ramírez, are available to process **wlcf** results. They are in the folder `tests\notebooks`. 
 
-https://github.com/joar-cafe/CBalls_plots/tree/main/benchmarks
-
-Other python scripts are in directory `tests/scripts`.
+Other python scripts are in directory `tests/python`.
 
 
 ## License
 
-**cBalls** is written by A. Aviles et al., is open source and distributed under the [MIT license](LICENSE). If you use this program in research work that results in publications, please cite the following paper:
+**wlcf** is written by A. Aviles et al., is open source and distributed under the [MIT license](LICENSE). If you use this program in research work that results in publications, please cite the following paper:
 
 Abraham Arvizu et al., [arXiv:2048.16847](https://arxiv.org/abs/2408.16847)
 
