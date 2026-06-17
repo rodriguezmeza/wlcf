@@ -1,35 +1,44 @@
+Documentation notes
+===================
 
-See the link:
+Build the Sphinx HTML documentation from the repository root with:
 
-https://github.com/lsst
-https://github.com/LSSTDESC
+    python -m pip install -r docs/requirements.txt
+    make -C docs html
 
-for examples of how to document.
+The generated HTML entry point is:
 
+    docs/_build/html/index.html
 
-See for Sphinx documentation making:
+Generated documentation under docs/_build is ignored by git and should be
+rebuilt locally when needed.
 
-https://www.sphinx-doc.org/en/master/tutorial/index.html
-https://www.youtube.com/watch?v=nZttMg_n_s0
-https://docs.readthedocs.io/en/stable/intro/getting-started-with-sphinx.html
-https://sphinx-themes.org/
+Manual page
+-----------
 
-To create a html version of man page do from wlcf directory:
+The manual page source is:
 
-man doc/wlcf.m | man2html -topm 0 -botm 0 -cgiurl \$title.html doc/wlcf.m > doc/wlcf.html
+    docs/man/wlcf.1
 
-If we follow tutorial en youtube:
+View it from the repository root with:
 
-sphinx-quickstart
+    man ./docs/man/wlcf.1
 
+If man2html is installed, generate an HTML copy with:
 
-Install additional themes or MkDocs
-pip install sphinx-rtd-theme
-pip install mkdocs
+    cd docs/man
+    ./makehtml.sh
 
+General references
+------------------
 
-Other useful links
+Sphinx documentation:
 
-https://sphinx-tutorial.readthedocs.io/step-1/
-https://github.com/kiith-sa/RestructuredText-tutorial/tree/master
+    https://www.sphinx-doc.org/en/master/tutorial/index.html
+    https://docs.readthedocs.io/en/stable/intro/getting-started-with-sphinx.html
+    https://sphinx-themes.org/
 
+Examples from related communities:
+
+    https://github.com/lsst
+    https://github.com/LSSTDESC

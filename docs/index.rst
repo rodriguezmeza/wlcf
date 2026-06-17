@@ -14,6 +14,7 @@ wlcf documentation
    installation
    params
    ps_files
+   io_formats
    pre_post_process
    addons
    python

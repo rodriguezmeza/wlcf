@@ -1,46 +1,48 @@
+Linear Power Spectrum Files
+===========================
 
-Linear power spectrum files
-===========
+``wlcf`` reads the linear matter power spectrum from the file selected by
+``fnamePS`` or its alias ``ps``.
 
-This section describes the format of the linear power spectrum required to compute correlation functions using **wlcf**.
+Format
+------
 
+The file must be a plain numeric ASCII table with two columns:
 
-**Standard formats**
+* ``k`` in units of ``h/Mpc``.
+* ``P(k)`` in units of ``(Mpc/h)^3``.
 
-:columns-ascii: The linear power spectrum is provided as an ASCII file with two columns:
+Example:
 
+.. code-block:: text
 
-- ``k`` = wavenumber in units of \( h \,\mathrm{Mpc}^{-1} \)
-- ``P(k)`` = linear matter power spectrum in units of \( (\mathrm{Mpc}/h)^3 \)
+    1.000000e-03  2.345678e+04
+    2.000000e-03  1.987654e+04
+    5.000000e-03  1.234567e+04
 
-Each row corresponds to a value of \( k \) and its associated power spectrum.
+Do not include header or comment lines in this file. The current reader expects
+two floating-point values per row.
 
-Example::
+Usage
+-----
 
-    # k [h/Mpc]    P(k) [(Mpc/h)^3]
-    1.000000e-03   2.345678e+04
-    2.000000e-03   1.987654e+04
-    5.000000e-03   1.234567e+04
-    ...
+From ``tests``:
 
+.. code-block:: bash
 
+    ../wlcf ps=./input/linear_pk_Takahashi_z0.txt
 
-**Usage in wlcf**
+Equivalent long-form parameter:
 
-To use a power spectrum file, specify:
+.. code-block:: bash
 
-::
+    ../wlcf fnamePS=./input/linear_pk_Takahashi_z0.txt
 
-    fnamePS=./input/linear_pk.txt
+The power spectrum can be generated with Boltzmann solvers such as CAMB or
+CLASS. Make sure the redshift, cosmology, and units are consistent with the
+rest of the run configuration.
 
+See Also
+--------
 
-The linear power spectrum can be generated using external Boltzmann solvers such as:
-
-* **CAMB**
-* **CLASS**
-
-These tools allow you to compute ( P(k) ) for a given cosmological model.
-
-.. note::
-
-Make sure to export the power spectrum at the desired redshift and in the correct units.
+See :doc:`io_formats` for the weak-lensing kernel and output table formats.

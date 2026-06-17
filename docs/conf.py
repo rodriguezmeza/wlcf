@@ -18,8 +18,8 @@
 # -- Project information -----------------------------------------------------
 
 project = 'WLCF'
-copyright = '2024, Alejandro Avilés'
-author = 'Alejandro Avilés'
+copyright = '2024, Alejandro Aviles'
+author = 'Alejandro Aviles'
 
 # The full version, including alpha/beta/rc tags
 release = '1.0.0'

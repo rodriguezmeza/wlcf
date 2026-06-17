@@ -31,9 +31,9 @@ A short documentation can be found in a html version of the man (linux manual) v
 
 Download the code by cloning it from https://github.com/rodriguezmeza/wlcf.
 
-Dependencies: wlcf needs gsl and fftw3 installed in your system. Sources are included. Try installing them. In case of problems go to web page https://www.gnu.org/software/gsl/ for details or ask to your system administrator. Make necessary changes in `Makefile_machine` file and look up for `GSL` and `FFTW·.
+Dependencies: wlcf needs gsl and fftw3 installed in your system. Sources are included. Try installing them. In case of problems go to web pages https://www.gnu.org/software/gsl/ and https://www.fftw.org/ for details or ask to your system administrator. Makefile and setup.py know how to add them. But in case of problems, make necessary changes in `Makefile_machine` file, look for them using `GSL` and `FFTW` strings.
 
-Go to the wlcf directory (`cd wlcf/`) and compile (`make clean; make all`). If the first compilation attempt fails, you may need to open the Makefile_machine file and adapt the name of the compiler (default: gcc), of the optimization flag (default: `-O4 -ffast-math`) and of the OpenMP flag (default: `-fopenmp`; this flag is facultative, you are free to compile without OpenMP if you don't want parallel execution; note that you need the version 4.2 or higher of gcc to be able to compile with `-fopenmp`). The code has been tested with gcc version 10 and 12 and would be working with version 11, and 13. (In particular, for compiling on Mac >= 10.9 despite of the clang incompatibility with OpenMP).
+Go to the wlcf directory (`cd wlcf/`) and compile (`make clean; make all`). If the first compilation attempt fails, you may need to open the Makefile_machine file and adapt the name of the compiler (default: gcc) and of the OpenMP flag (default: `-fopenmp`; this flag is facultative, you are free to compile without OpenMP if you don't want parallel execution; note that you need the version 4.2 or higher of gcc to be able to compile with `-fopenmp`). The code has been tested with gcc version 10 and 12 and would be working with version 11, and 13. (In particular, for compiling on Mac >= 10.9 despite of the clang incompatibility with OpenMP).
 
 To check that the code runs, if you are in `wlcf` directory, type:
 
@@ -111,6 +111,7 @@ wlcf use/is based on the following codes or projects:
 -   [Zeno](https://home.ifa.hawaii.edu/users/barnes/zeno/index.html)
 -   [Numerical recipies](https://numerical.recipes/)
 -   [GSL](https://www.gnu.org/software/gsl/)
+-   [FFTW](https://www.fftw.org/)
 -   [CLASS](https://github.com/lesgourg/class_public)
 
 Also Alejandro Aviles acknowledges support by grants UNAM PAPIIT IA101825 and SECIHTI CBF2023-2024-162.

@@ -30,20 +30,23 @@ where:
 
 **Output**
 
-The results of the harmonic decomposition are stored in files:
+The results of the harmonic decomposition are stored in files under
+``rootDir``. File names use the configured ``prefix``:
 
 ::
 
-    zetam0.txt
-    zetam1.txt
+    <prefix>zetam0.txt
+    <prefix>zetam1.txt
     ...
-    zetamN.txt
+    <prefix>zetamN.txt
 
 along with the corresponding angular grid:
 
 ::
     
-    theta_array.txt
+    <prefix>theta_array.txt
 
 
 These outputs can be used to reconstruct or visualize the full three-point correlation function.
+
+See :doc:`io_formats` for the related ``Bmells_*``, ``Bnk_*``, and grid files.

@@ -31,10 +31,6 @@ def wlcf_Bells(ellmin, ellmax, chiQuadSteps, Nell, zbin, mMax,
     Bells.set({'Omnu':0.0})
     Bells.set({'fnamePS':psfile})
     Bells.set({'prefix':'run1_'})
-    if outdir == None:
-        Bells.set({'path_Bells':'Bell_outputs'})
-    else:
-        Bells.set({'path_Bells':outdir})
     Bells.set({'tree_level':tree_level})
     Bells.set({'zbin':zbin})
     Bells.set({'mMax':mMax})
@@ -47,7 +43,10 @@ def wlcf_Bells(ellmin, ellmax, chiQuadSteps, Nell, zbin, mMax,
     Bells.set({'fWgchi':"./input/Wg_Takahashi_z05078.txt"})
     Bells.set({'writevectors':1})
     Bells.set({'numberThreads':nthreads})
-    Bells.set({'rootDir':outdir})
+    if outdir == None:
+        Bells.set({'rootDir':'Output'})
+    else:
+        Bells.set({'rootDir':outdir})
     Bells.set({'options':''})
     Bells.set({'chatty':2})
     Bells.set({'verbose':1})
@@ -56,16 +55,10 @@ def wlcf_Bells(ellmin, ellmax, chiQuadSteps, Nell, zbin, mMax,
     print('Running...')
     cputime=Bells.Run()
 
-#    nmonopoles = Balls.getnMonopoles()
-    
-    # getHistZetaM_sincos(m, type): m multipole,
-    #   type: 1 - cos; 2 - sin; 3 - sincos; 4 - cossin
-    # edge_effects not programmed yet
+    #B not implemented yet...
     monopolesData = []
-#    for j in range(1,nmonopoles+1):
-#        zcos = Balls.getHistZetaMsincos(j, 1)
-#        zsin = Balls.getHistZetaMsincos(j, 2)
-#        monopolesData.append(zcos+zsin)
+    #E
+
     print('MainLoop cputime=',cputime,' sec.')
     print('cleaning all...')
     Bells.clean_all()
@@ -98,8 +91,10 @@ def main():
             psfile=args.fnamePS, tree_level=args.tree_level)
     print()
     print()
+    #B not implemented yet
     print('zeta monopole:')
-#    print(zeta[0])
+    #print(zeta[0])
+    #E
 
 if __name__ == "__main__":
     main()

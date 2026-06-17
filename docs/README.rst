@@ -1,70 +1,78 @@
 wlcf: Weak Lensing Correlation Function
 ---------------------------------------
 
-**Authors:** A. Aviles, J.C. Hidalgo, E.A. Moreno-Alcala, G. Niz, S. Ramirez, Mario A. Rodriguez-Meza, S. Samario-Nava
+``wlcf`` is a C code for computing weak-lensing correlation-function models.
+The current workflow focuses on the three-point correlation function (3PCF) of
+the weak-lensing convergence field using perturbation-theory, EFT, and
+Takahashi/Halo-model inspired branches.
 
-For download and information, see https://github.com/rodriguezmeza/wlcf.git .
+For source code and releases, see:
 
-Introduction
-------------
+https://github.com/rodriguezmeza/wlcf.git
 
-**wlcf** is a C code designed to compute cosmological correlation functions using theoretical frameworks such as Standard Perturbation Theory (SPT), Effective Field Theory (EFT), and the Halo Model. Currently, it focuses on the computation of the **three-point correlation function (3PCF)** for galaxy weak lensing convergence in a plane-wave expansion.
-Paper available at (https://arxiv.org/abs/2408.16847). 
+The associated paper is available at:
 
-Compiling and getting started
------------------------------
+https://arxiv.org/abs/2408.16847
 
-Download the code by cloning it from:
-https://github.com/rodriguezmeza/wlcf.git .
+Quick Start
+-----------
 
-**Dependencies:**
-`wlcf` optionally requires **GSL (GNU Scientific Library)** and **FFTW3** installed in your system. Make sure to adapt the paths to these libraries in `Makefile_machine`.
+Clone and build:
 
-Tu run the code go to the `wlcf` directory and compile the code::
+.. code-block:: bash
 
+    git clone https://github.com/rodriguezmeza/wlcf.git
+    cd wlcf
+    make clean
+    make all
 
-    $ cd wlcf
-    $ make clean
-    $ make all
+Run the default example:
 
+.. code-block:: bash
 
-The code has been tested with modern versions of `gcc`. OpenMP support is optional but recommended for parallel execution. In addition, the code provides a Python wrapper that allows it to be run and controlled directly from Python.
+    cd tests
+    ../wlcf
 
+This creates run outputs such as:
 
-To verify that the code runs correctly::
+* ``Output/`` for logs and used-parameter files.
+* ``Bell_outputs/`` for files such as ``zetam*``, ``Bmells_*``, and ``Bnk_*``.
 
-    $ cd tests
-    $ ./wlcf
+Documentation
+-------------
 
-This will execute the code using default parameters. A directory named `Output` will be created inside `tests`, where all results are stored, including:
+Build the Sphinx documentation with:
 
-* output data files (e.g., `zetam*`, `Bmells*`, `Bnk*`)
-* a log file inside `Output/tmp`
+.. code-block:: bash
 
-You can consult man page::
+    python -m pip install -r docs/requirements.txt
+    make -C docs html
 
-    $ man ../docs/wlcf.1
+Open ``docs/_build/html/index.html`` after the build completes.
 
-or open with a browser the html file: docs/man/wlcf.html
+The Unix manual page source is available at ``docs/man/wlcf.1`` and can be
+viewed with:
 
+.. code-block:: bash
+
+    man ./docs/man/wlcf.1
 
 License
 -------
 
-wlcf is written by A. Aviles et al., and is distributed under the `MIT license <https://github.com/rodriguezmeza/wlcf/blob/main/LICENSE>`_. If you use this program in research work that results in publications, please cite the following paper:
+``wlcf`` is distributed under the MIT license. If you use this program in
+research work that results in publications, please cite:
 
-`Abraham Arvizu et al., arXiv:2048.16847 <https://arxiv.org/abs/2408.16847>`_
-
+`Abraham Arvizu et al., JCAP 12 (2024) 049; arXiv:2408.16847 <https://arxiv.org/abs/2408.16847>`_
 
 Acknowledgements
 ----------------
 
-wlcf use/is based on the following codes or projects:
+``wlcf`` uses or builds on ideas, routines, or conventions from:
 
 * `FFTLog <https://github.com/xfangcosmo/2DFFTLog>`_
 * `The BiHaloFit model of Takahashi <https://cosmo.phys.hirosaki-u.ac.jp/takahasi/codes_e.htm>`_
 * `Zeno <https://home.ifa.hawaii.edu/users/barnes/zeno/index.html>`_
-* `Numerical recipies <https://numerical.recipes/>`_
+* `Numerical Recipes <https://numerical.recipes/>`_
 * `GSL <https://www.gnu.org/software/gsl/>`_
 * `CLASS <https://github.com/lesgourg/class_public>`_
-

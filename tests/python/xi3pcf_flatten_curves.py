@@ -21,22 +21,8 @@ plt.rcParams.update({
 })
 
 def load_z_matrix(path,type=None,nmonopoles=8):
-#    if type=="sincos":
-#        yfileCos = path+"/"+"histZetaM_cos_"
-#        yfileSin = path+"/"+"histZetaM_sin_"
-#    else:
-#        if type=="edge_effects":
-#            yfileEE = path+"/"+"histZetaM_EE_"
     yfileEE = path+"/"+"run1_zetam"
     expData = []
-#    if type=="sincos":
-#        for j in range(1,nmonopoles+1):
-#            expData.append(np.loadtxt(yfileCos + str(j) +".txt")
-#                    + np.loadtxt(yfileSin + str(j) +".txt"))
-#    else:
-#        if type=="edge_effects":
-#            for j in range(1,nmonopoles+1):
-#                expData.append(np.loadtxt(yfileEE + str(j) +".txt"))
     for j in range(1,nmonopoles+1):
         expData.append(np.loadtxt(yfileEE + str(j) +".txt"))
 
@@ -139,8 +125,6 @@ def main():
 
     print('triangle indexes yA:',yA[0].shape[0]*yA[0].shape[0])
     print('triangle indexes yB:',yB[0].shape[0]*yB[0].shape[0])
-#    print('triangle indexes yA:',yA[0])
-#    print('triangle indexes yB:',yB[0])
     xmin = args.bin_min
     xmax = args.bin_max
 
@@ -185,8 +169,6 @@ def main():
     ax.set_ylabel(ylabel1,fontsize=35)
     ax.set_xlim(xmin,xmax)
     ax.tick_params(labelsize = 25)
-    #ax.legend(fontsize=25)
-    #ax.set_ylim(ylim1,ylim2)
     ax.set_xscale(xscale)
     ax.set_yscale(yscale)
     ax.axes.xaxis.set_ticklabels([])
@@ -199,8 +181,6 @@ def main():
     ax.set_ylabel(ylabel2,fontsize=35)
     ax.set_xlim(xmin,xmax)
     ax.tick_params(labelsize = 25)
-    #ax.legend(fontsize=25)
-    #ax.set_ylim(ylim1,ylim2)
     ax.set_xscale(xscale)
     ax.set_yscale(yscale)
     ax.axes.xaxis.set_ticklabels([])
@@ -213,8 +193,6 @@ def main():
     ax.set_ylabel(ylabel3,fontsize=35)
     ax.set_xlim(xmin,xmax)
     ax.tick_params(labelsize = 25)
-    #ax.legend(fontsize=25)
-    #ax.set_ylim(ylim1,ylim2)
     ax.set_xscale(xscale)
     ax.set_yscale(yscale)
     ax.axes.xaxis.set_ticklabels([])
@@ -228,8 +206,6 @@ def main():
     ax.set_ylabel(ylabel4,fontsize=35)
     ax.set_xlim(xmin,xmax)
     ax.tick_params(labelsize = 25)
-    #ax.legend(fontsize=25)
-    #ax.set_ylim(ylim1,ylim2)
     ax.set_xscale(xscale)
     ax.set_yscale(yscale)
 
@@ -249,7 +225,6 @@ def main():
     ax.set_ylabel(dylabel0,fontsize=35)
     ax.set_xlim(xmin,xmax)
     ax.tick_params(labelsize = 25)
-    #ax.legend(fontsize=25)
     ax.axes.xaxis.set_ticklabels([])
     # m=1
     ax = fig.add_subplot(gs[1, :])

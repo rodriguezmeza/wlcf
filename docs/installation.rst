@@ -1,122 +1,155 @@
-
-
 WLCF Installation
 =================
 
-The wlcf code is a C-based implementation for computing higher-order correlation functions in cosmology, with optional support for parallel execution via OpenMP and a Python interface for flexible workflows.
-This section guides you through installing the code, compiling it, and running a first test example.
+``wlcf`` is a C-based implementation for computing weak-lensing correlation
+function models, with optional OpenMP support and a Cython wrapper for Python
+workflows. This page covers the usual build and smoke-test path.
 
 Requirements
 ------------
 
-TThe code requires:
+The executable requires:
 
-* A C compiler (recommended: `gcc >= 10`)
+* A C compiler, usually ``gcc``.
+* **GSL** when ``USEGSL = 1`` in ``Makefile_settings``.
+* **FFTW3** when ``USEFFTW3ON = 1`` in ``Makefile_machine``.
 
-* Optional libraries:
+The Python wrapper additionally requires:
 
-  * **GSL** (GNU Scientific Library)
-  * **FFTW3**
+* Python.
+* ``numpy``.
+* ``cython``.
 
-* Python (optional, for the wrapper interface):
+The bundled ``addons/gsl`` and ``addons/fftw3`` directories include source
+archives and notes, but most users should prefer system or environment-managed
+installations when available.
 
-  * `numpy`
-  * `cython`
+Clone
+-----
 
-Compilation
------------
-
-Clone the repository:
+Clone the repository and enter the source tree:
 
 .. code-block:: bash
 
-    git clone https://github.com/your-repo/wlcf.git
+    git clone https://github.com/rodriguezmeza/wlcf.git
     cd wlcf
 
-Edit the file ``Makefile_machine`` if needed to specify library paths (GSL, FFTW).
+Configure
+---------
 
-Compile the code:
+Edit ``Makefile_settings`` first:
+
+* ``USEGSL`` controls whether GSL-dependent code is compiled.
+* ``GSLINTERNAL`` controls whether bundled GSL sources are used.
+* ``OPENMPMACHINE`` controls whether OpenMP support is compiled.
+* ``ADDONSON`` enables addon include sockets and support files.
+
+Then edit ``Makefile_machine`` for machine-specific compiler choices:
+
+* ``CC`` selects the compiler.
+* ``PYTHON`` selects the Python interpreter used by ``make all``.
+
+The Python wrapper setup is portable and does not require editing
+``setup.py`` for ordinary Linux, Conda, Homebrew, or Colab-style
+installations. It searches environment variables, ``pkg-config``, and common
+library locations. For custom library prefixes, use:
+
+.. code-block:: bash
+
+    export GSL_DIR=/path/to/gsl
+    export FFTW_DIR=/path/to/fftw
+    export WLCF_INCLUDE_DIRS=/extra/include
+    export WLCF_LIBRARY_DIRS=/extra/lib
+
+Compile
+-------
+
+To build the executable and static library:
 
 .. code-block:: bash
 
     make clean
     make
 
-If GSL is not available, it can be disabled in `Makefile_settings` by setting:
+To build the executable, static library, and Python wrapper:
 
 .. code-block:: bash
 
-   USEGSL = 0
+    make clean
+    make all
 
-If compilation is successful, the executable ``wlcf`` will be created in the main directory.
+To force a Python 3 interpreter:
 
-To verify the installation:
+.. code-block:: bash
+
+    PYTHON=python3 make all
+
+If compilation fails, first verify that GSL and FFTW are installed and visible
+through ``pkg-config`` or the environment variables above. If the Python wrapper
+reports that ``libwlcf.a`` is missing, run ``make libwlcf.a`` or ``make all``
+from the repository root.
+
+Smoke Test
+----------
+
+Run a default example from ``tests``:
 
 .. code-block:: bash
 
     cd tests
-    ./wlcf
+    ../wlcf
 
+This runs with default parameter values compiled from
+``getparam/cmdline_defs.h``.
 
-This runs the code using default parameters.
+Typical outputs are:
 
-After execution, the following will be generated:
+* ``Output/`` for logs and the generated ``*-usedvalues`` parameter file.
+* ``Bell_outputs/`` for 3PCF and bispectrum tables.
+* ``Output/tmp/wlcf.log`` when file logging is enabled.
 
-* `Output/` directory
-* Correlation function files:
+The generated ``*-usedvalues`` file can be copied or renamed and then edited
+as a custom parameter file for future runs.
 
-  * `zetam*`
-  * `Bmells*`
-  * `Bnk*`
-* Log files (inside `Output/tmp`)
-* Parameter file: `parameters_null-cballs-usedvalues*`
+Python Wrapper Check
+--------------------
 
-
-.. note::
-
-This parameter file can be used as a template for custom runs.
-
-**Python wrapper**
-
-The code includes a Python interface for easier control and integration.
-
-Build the wrapper
+After ``make all`` succeeds, check that Python can import the wrapper:
 
 .. code-block:: bash
 
-    make all
+    python -c "from wlcfpy import wlcf; print(wlcf)"
 
-Install dependencies if needed:
-
-You can use the wrapper as
+A minimal run from inside ``tests`` looks like:
 
 .. code-block:: python
 
     from wlcfpy import wlcf
 
     w = wlcf()
-    w.set(numberThreads=4, verbose=1)
+    w.set(
+        numberThreads=8,
+        fnamePS="./input/linear_pk_Takahashi_z0.txt",
+        tree_level=4,
+    )
     w.Run()
 
-**Parallel execution (OpenMP)**
+Parallel Execution
+------------------
 
-The code supports shared-memory parallelism using OpenMP.
-
-To control the number of threads:
+OpenMP is available only when ``OPENMPMACHINE = 1`` is set before compiling.
+The run-time thread count can be controlled with either the environment or the
+``numberThreads`` parameter:
 
 .. code-block:: bash
 
     export OMP_NUM_THREADS=8
+    ../wlcf numberThreads=8
 
+HPC Example
+-----------
 
-.. note::
-
-The code may also set the number of threads internally using the parameter `numberThreads`.
-
-
-**HPC example (Perlmutter)**
-
-On **NERSC Perlmutter**, a typical workflow in an interactive node is:
+On NERSC Perlmutter, a typical interactive workflow is:
 
 .. code-block:: bash
 
@@ -124,12 +157,6 @@ On **NERSC Perlmutter**, a typical workflow in an interactive node is:
     salloc -N 1 -C cpu -q interactive -t 01:00:00
     export OMP_NUM_THREADS=32
     cd wlcf/tests
-    ../wlcf
+    ../wlcf numberThreads=32
 
-
-**Notes**
-
-* If compilation fails, verify library paths in `Makefile_machine`
-* OpenMP requires a compatible compiler (e.g., `gcc` with `-fopenmp`)
-* Performance may saturate at high thread counts depending on the workload
-* For large runs, always use compute nodes rather than login nodes
+Use compute nodes rather than login nodes for production-size runs.

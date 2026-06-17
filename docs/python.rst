@@ -1,72 +1,109 @@
-
-Python interface
+Python Interface
 ================
 
-This section describes how to interact with **wlcf** using Python, either through the command line interface or via the Cython wrapper.
+``wlcf`` can be driven from Python in two ways:
 
-**Using command line interface**
+* call the executable with ``subprocess``;
+* use the Cython wrapper exposed as ``wlcfpy``.
 
-The simplest way to run **wlcf** from Python is by calling the executable through the system shell.
+Calling The Executable
+----------------------
 
-Example
+The command-line interface is often the easiest option for scans and batch
+workflows:
 
-python::
-
-    import os
-
-    os.system("../wlcf z=0.5 sigma8=0.8 fnamePS=./input/linear_pk.txt")
-
-
-Alternatively, using `subprocess` :
-
-python::
+.. code-block:: python
 
     import subprocess
 
-    subprocess.run([
-        "../wlcf",
-        "z=0.5",
-        "sigma8=0.8",
-        "fnamePS=./input/linear_pk.txt"])
+    subprocess.run(
+        [
+            "../wlcf",
+            "tree_level=4",
+            "ps=./input/linear_pk_Takahashi_z0.txt",
+            "prefix=halo_model_z05078_",
+        ],
+        check=True,
+    )
 
+Parameters must be passed as ``key=value`` strings with no spaces around
+``=``.
 
-This approach allows you to:
+Cython Wrapper
+--------------
 
-* run parameter scans
-* automate workflows
-* integrate wlcf into larger pipelines
+Build the wrapper with:
 
-.. note::
+.. code-block:: bash
 
-When using the command line interface, parameters must be passed as `key=value` without spaces.
+    make clean
+    make all
 
-**Cython interface**
+or, with a specific interpreter:
 
-The code provides a **Cython wrapper** that allows direct interaction with wlcf from Python without invoking the executable.
+.. code-block:: bash
 
+    PYTHON=python3 make all
 
-example
+Then check the import:
 
-python::
+.. code-block:: bash
+
+    python -c "from wlcfpy import wlcf; print(wlcf)"
+
+Minimal wrapper usage from inside ``tests``:
+
+.. code-block:: python
 
     from wlcfpy import wlcf
 
     w = wlcf()
-    
     w.set(
-        numberThreads=4,
-        verbose=1,
-        fnamePS="./input/linear_pk.txt")
+        numberThreads=8,
+        verbose=2,
+        fnamePS="./input/linear_pk_Takahashi_z0.txt",
+        tree_level=4,
+        prefix="halo_model_z05078_",
+    )
+    cputime = w.Run()
+    print(cputime)
 
+The wrapper accepts either keyword arguments or a dictionary:
+
+.. code-block:: python
+
+    params = {
+        "numberThreads": 8,
+        "tree_level": 4,
+        "fnamePS": "./input/linear_pk_Takahashi_z0.txt",
+    }
+
+    w = wlcf()
+    w.set(params)
     w.Run()
 
+Troubleshooting
+---------------
 
+If ``make all`` fails while building ``wlcfpy``:
 
-**Notes**
+* Confirm that GSL and FFTW are installed and visible through ``pkg-config`` or
+  through ``GSL_DIR`` and ``FFTW_DIR``.
+* Confirm that ``libwlcf.a`` exists in the repository root. If not, run
+  ``make libwlcf.a``.
+* For custom library locations, set ``WLCF_INCLUDE_DIRS`` and
+  ``WLCF_LIBRARY_DIRS`` before running ``make all``.
+* If OpenMP is enabled, make sure the compiler and Python extension link
+  against the matching OpenMP runtime.
 
-* The working directory should contain the required input files (e.g., power spectrum).
-* Output files are written in the same way as the C executable.
-* Some parameters (e.g., number of threads) may be controlled both via Python and internally by the code.
+If the wrapper raises an error about unread parameters, compare the parameter
+names with ``../wlcf --help``. The wrapper is stricter than the executable and
+reports parameters that were not understood by the C input layer.
 
+Notes
+-----
 
-
+The working directory should contain the input files referenced by relative
+paths such as ``./input/linear_pk_Takahashi_z0.txt``. Output files are written
+using the same ``rootDir``, and ``prefix`` rules as the C
+executable.

@@ -21,7 +21,6 @@ void extrap_log_linear(double *fk, int N_origin, int N_extra, double *large_fk) 
 	int i;
 
 	dln_left = log(fk[1]/fk[0]);
-	// printf("fk[0],fk[1]: %.15e,%.15e,%.15e,%.15e,%.15e\n", fk[0],fk[1],fk[2],fk[3],fk[4]);
 	if(fk[0]<=0.) {
 		for(i=0; i<N_extra; i++) {
 			large_fk[i] = 0.;
@@ -83,7 +82,6 @@ void extrap_log_bilinear(double **fk, int N_origin, int N_extra, double **large_
 	}
 }
 
-
 void extrap_bilinear(double **fk, int N_origin, int N_extra, double **large_fk) {
 	int i,j;
 	double dleft, dright;
@@ -92,14 +90,12 @@ void extrap_bilinear(double **fk, int N_origin, int N_extra, double **large_fk) 
 		dright = fk[i-N_extra][N_origin-1]-fk[i-N_extra][N_origin-2];
 		for(j=0; j<N_extra; j++) {
 			large_fk[i][j] = fk[i-N_extra][0] + (j - N_extra) * dleft;
-			// if(isnan(large_fk[i][j])) {large_fk[i][j]=0.;}
 		}
 		for(j=N_extra; j< N_extra+N_origin; j++) {
 			large_fk[i][j] = fk[i-N_extra][j - N_extra];
 		}
 		for(j=N_extra+N_origin; j< 2*N_extra+N_origin; j++) {
 			large_fk[i][j] = fk[i-N_extra][N_origin-1] + (j - N_extra - N_origin +1) * dright;
-			// if(isnan(large_fk[i][j])) {large_fk[i][j]=0.;}
 		}
 	}
 	double dup, ddown;
@@ -108,11 +104,9 @@ void extrap_bilinear(double **fk, int N_origin, int N_extra, double **large_fk) 
 		ddown = large_fk[N_extra+N_origin-1][j]-large_fk[N_extra+N_origin-2][j];
 		for(i=0; i<N_extra; i++) {
 			large_fk[i][j] = large_fk[N_extra][j] + (i - N_extra) * dup;
-			// if(isnan(large_fk[i][j])) {large_fk[i][j]=0.;}
 		}
 		for(i=N_extra+N_origin; i< 2*N_extra+N_origin; i++) {
 			large_fk[i][j] = large_fk[N_extra+N_origin-1][j] + (i - N_extra - N_origin +1) * ddown;
-			// if(isnan(large_fk[i][j])) {large_fk[i][j]=0.;}
 		}
 	}
 }
@@ -125,7 +119,6 @@ void extrap_2dzeros(double **fk, int N_origin, int N_extra, double **large_fk) {
 		}
 		for(j=N_extra; j< N_extra+N_origin; j++) {
 			large_fk[i][j] = fk[i-N_extra][j - N_extra];
-			// if(isnan(large_fk[i][j])) {printf("large_fk nan at: %d,%d\n", i,j);large_fk[i][j]=0.;}
 		}
 		for(j=N_extra+N_origin; j< 2*N_extra+N_origin; j++) {
 			large_fk[i][j] = 0.;
@@ -134,23 +127,12 @@ void extrap_2dzeros(double **fk, int N_origin, int N_extra, double **large_fk) {
 	for(j=0; j<N_origin+2*N_extra; j++) {
 		for(i=0; i<N_extra; i++) {
 			large_fk[i][j] = 0.;
-			// if(isnan(large_fk[i][j])) {large_fk[i][j]=0.;}
 		}
 		for(i=N_extra+N_origin; i< 2*N_extra+N_origin; i++) {
 			large_fk[i][j] = 0.;
-			// if(isnan(large_fk[i][j])) {large_fk[i][j]=0.;}
 		}
 	}
 }
-
-// void resample_fourier_gauss(double *k, double *fk, config *config, double *k_sample, double *fk_sample) {
-// 	long i;
-// 	double dlnk = log(k[sizeof(k)-1]/k[0]) / (config->Nk_sample-1.);
-// 	for(i=0; i<config->Nk_sample; i++) {
-// 		k_sample[i] = k[0] * exp(i*dlnk);
-// 		fk_sample[i] = 
-// 	}
-// }
 
 double complex gamma_lanczos(double complex z) {
 /* Lanczos coefficients for g = 7 */
@@ -217,8 +199,7 @@ Calculate g_l = zln2 + lngamma( (l+nu)/2 + I*eta/2 ) - lngamma( (3+l-nu)/2 - I*e
 	for(i=0; i<N; i++) {
 		z = nu+I*eta[i];
 		if(l+fabs(eta[i])<200){
-			// gl[i] = cexp(z*log(2.) + clog(gamma_lanczos((l+z)/2.) ) - clog(gamma_lanczos((3.+l-z)/2.)));
-			gl[i] = cexp(z*log(2.) + lngamma_lanczos((l+z)/2.) - lngamma_lanczos((3.+l-z)/2.) );	
+			gl[i] = cexp(z*log(2.) + lngamma_lanczos((l+z)/2.) - lngamma_lanczos((3.+l-z)/2.) );
 		}else{
 			gl[i] = cexp(z*log(2.) + ln_g_m_vals(l+0.5, z-1.5));
 		}
@@ -233,8 +214,8 @@ Calculate g_l_smooth = g_l * exp((2.-z)*smooth_dlnr) / (2.-z) */
 	for(i=0; i<N; i++) {
 		z = nu+I*eta[i];
 		if(l+fabs(eta[i])<200){
-			// gl[i] = cexp(z*log(2.) + clog(gamma_lanczos((l+z)/2.) ) - clog(gamma_lanczos((3.+l-z)/2.)));
-			gl[i] = cexp(z*log(2.) + lngamma_lanczos((l+z)/2.) - lngamma_lanczos((3.+l-z)/2.) );	
+			gl[i] = cexp(z*log(2.) + lngamma_lanczos((l+z)/2.)
+                    - lngamma_lanczos((3.+l-z)/2.) );
 		}else{
 			gl[i] = cexp(z*log(2.) + ln_g_m_vals(l+0.5, z-1.5));
 		}
@@ -247,8 +228,12 @@ void c_window_2d(double complex *out, double c_window_width, long halfN1, long h
 	long Ncut1, Ncut2;
 	long N1;
 	N1 = 2*halfN1;
-	Ncut1 = (long)(halfN1 * c_window_width);
-	Ncut2 = (long)(halfN2 * c_window_width);
+    
+    Ncut1 = (long)(halfN1 * c_window_width);
+    Ncut2 = (long)(halfN2 * c_window_width);
+    if (Ncut1 < 1 || Ncut2 < 1)
+        return;
+    
 	long i,j;
 	double W;
 	for(j=0; j<=Ncut2; j++) { // window for right-side
@@ -257,7 +242,8 @@ void c_window_2d(double complex *out, double c_window_width, long halfN1, long h
 			out[i*(halfN2+1)+ halfN2-j] *= W;
 		}
 	}
-	for(i=0; i<=Ncut1; i++){ // window for center part (equivalent for up-down edges when rearanged)
+	for(i=0; i<=Ncut1; i++){
+        // window for center part (equivalent for up-down edges when rearanged)
 		W = (double)(i)/Ncut1 - 1./(2.*M_PI) * sin(2.*i*M_PI/Ncut1);
 		for(j=0; j<=halfN2; j++) {
 			out[(halfN1-i)*(halfN2+1) + j] *= W;
